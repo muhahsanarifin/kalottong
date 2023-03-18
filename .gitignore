@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# components
+src/components
+
+# Utils
+src/utils
+
+# Redux
+src/redux
