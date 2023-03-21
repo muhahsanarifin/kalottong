@@ -12,7 +12,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "red=orange": "#ff5f26",
+        "red-orange": "#ff5f26",
         "cyan-blue": "#293038",
         red: {
           50: "#fef2f2",
@@ -26,6 +26,9 @@ module.exports = {
           800: "#991b1b",
           900: "#7f1d1d",
         },
+      },
+      width: {
+        '125': "7.8125rem",
       },
     },
     screens: {
