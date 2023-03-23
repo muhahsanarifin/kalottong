@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useOnClickOutside } from "usehooks-ts";
 import Image from "next/image";
 import Link from "next/link";
 import KalottongLogo from "../assets/icons/kalottong.svg";
@@ -7,7 +8,23 @@ import OffNotificationIcon from "../assets/icons/off-notification.png";
 import AvatarIcon from "../assets/icons/avatar.png";
 
 const Header = () => {
-  const [hidden, setHidden] = useState<Boolean>(true);
+  const [hiddenClickOutside, setHiddenClickOutside] = useState<Boolean>(true);
+  const [hiddenClickInside, setHiddenClickInside] = useState<Boolean>(true);
+
+  const handleClickInside = () => {
+    // console.log("Click Inside");
+    setHiddenClickInside(false);
+  };
+
+  const ref = useRef(null);
+  const handleClickOutside = () => {
+    // console.log("Click Outside");
+    setHiddenClickInside(true);
+    setHiddenClickOutside(!hiddenClickOutside);
+  };
+
+  useOnClickOutside(ref, handleClickOutside);
+
   return (
     <>
       <header className="flex items-center">
@@ -53,13 +70,11 @@ const Header = () => {
                 <div className="flex items-center">
                   <button
                     className={
-                      hidden
+                      hiddenClickInside || hiddenClickOutside
                         ? "flex items-center text-sm font-medium gap-x-2 rounded-full z-40"
                         : "flex items-center text-sm font-medium gap-x-2 focus:ring-4 focus:ring-[#ffb291] rounded-full z-40"
                     }
-                    onClick={() => {
-                      setHidden(!hidden);
-                    }}
+                    onClick={handleClickInside}
                   >
                     <Image
                       src={AvatarIcon}
@@ -84,8 +99,9 @@ const Header = () => {
                 </div>
                 {/* Dropdown menu */}
                 <div
+                  ref={ref}
                   className={
-                    hidden
+                    hiddenClickInside || hiddenClickOutside
                       ? "hidden"
                       : "border-2 border-solid absolute right-0 bg-white divide-y divide-gray-100 rounded-lg mt-2"
                   }
