@@ -1,18 +1,23 @@
-import Title from "@/components/Title";
+import React, { useState } from "react";
+import { TitleHome } from "@/components/Layout";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import Main from "@/components/main";
 
 const Home = () => {
   return (
     <>
-      <Title title="home"/>
-      <main>
-        <section>
-          <h1>Home section</h1>
-        </section>
-      </main>
-      <Footer/>
+      <TitleHome>
+        <Header />
+        <Main/>
+        <Footer />
+      </TitleHome>
     </>
   );
 };
 
 export default Home;
+
+// Home.getLayout = function getLayout(page: React.ReactElement) {
+//   return (<TitleHome>{page}</TitleHome>);
+// };
