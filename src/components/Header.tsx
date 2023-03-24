@@ -27,7 +27,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex items-center">
+      <header className="flex items-center border-2 border-solid">
         {/* Left header section */}
         <section>
           <Image
@@ -72,7 +72,7 @@ const Header = () => {
                     className={
                       hiddenClickInside || hiddenClickOutside
                         ? "flex items-center text-sm font-medium gap-x-2 rounded-full z-40"
-                        : "flex items-center text-sm font-medium gap-x-2 focus:ring-4 focus:ring-[#ffb291] rounded-full z-40"
+                        : "flex items-center text-sm font-medium gap-x-2 focus:ring focus:ring-[#ffb291] rounded-full z-40"
                     }
                     onClick={handleClickInside}
                   >
