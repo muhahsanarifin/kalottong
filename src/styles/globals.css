@@ -4,9 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* xs =  @media (max-width: 475px) */
 @layer base {
   html {
     font-family: "Poppins", sans-serif;
-    @apply py-5 px-20;
+    @apply py-5 px-20 xs:p-0;
   }
 }
