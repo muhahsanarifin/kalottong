@@ -1,8 +1,16 @@
 const Footer = () => {
+  const getFullYear = () => {
+    return new Date().getFullYear();
+  };
+
+  const year = getFullYear();
+
   return (
     <>
-      <footer>
-        <h1>Footer section</h1>
+      <footer className="flex">
+        <h1 className="text-[14px] font-medium">
+          © 2022 - {year} <span className="text-red-orange">kalottong</span>
+        </h1>
       </footer>
     </>
   );
