@@ -6,10 +6,12 @@ import KalottongLogo from "../assets/icons/kalottong.svg";
 import ActiveNotificationIcon from "../assets/icons/active-notification.png";
 import OffNotificationIcon from "../assets/icons/off-notification.png";
 import AvatarIcon from "../assets/icons/avatar.png";
+import { AuthModal } from "./Modal";
 
 const Header = () => {
   const [hiddenClickOutside, setHiddenClickOutside] = useState<Boolean>(true);
   const [hiddenClickInside, setHiddenClickInside] = useState<Boolean>(true);
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const handleClickInside = () => {
     // console.log("Click Inside");
@@ -27,7 +29,11 @@ const Header = () => {
 
   return (
     <>
-      <header className="flex items-center border-2 border-solid">
+      <AuthModal
+        onShow={showModal}
+        onSetClose={() => setShowModal(!showModal)}
+      />
+      <header className="flex items-center">
         {/* Left header section */}
         <section>
           <Image
@@ -40,8 +46,11 @@ const Header = () => {
         </section>
         {/* Right header section */}
         <section className="ml-auto flex gap-x-4">
-          {!true ? (
-            <button className="text-white bg-red-orange hover:bg-[#f3551c] text-sm rounded-lg font-medium px-5 py-2.5 focus:ring-4 focus:ring-[#ffb291]">
+          {true ? (
+            <button
+              className="text-white bg-red-orange hover:bg-[#f3551c] text-sm rounded-lg font-medium px-5 py-2.5 focus:ring-4 focus:ring-[#ffb291]"
+              onClick={() => setShowModal(!showModal)}
+            >
               Login
             </button>
           ) : (
