@@ -3,7 +3,7 @@ export type TokenProps = {
 };
 
 export type BodyProps = {
-  body: any;
+  [key: string]: any;
 };
 
 export type ParamsProps = {
