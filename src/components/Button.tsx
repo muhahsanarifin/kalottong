@@ -4,14 +4,27 @@ import AddSubTaskIcon from "../assets/icons/plus-red-orange.png";
 import ArrowDownOrange from "../assets/icons/arrow-down-2-red-orange.png";
 import ArrowDown from "../assets/icons/arrow-down-2.png";
 import ArrowUpGray from "../assets/icons/arrow-up-2-gray.png";
+import ArrowRight from "../assets/icons/arrow-right-2.png";
 import TrashIcon from "../assets/icons/trash.png";
 import MoreIcon from "../assets/icons/more-vertical.png";
-import { ButtonProps, TaskDropDownButtonProps } from "@/utils/types/button";
+import {
+  ButtonProps,
+  TaskDropDownButtonProps,
+  AddTaskDropDownButtonProps,
+  DoneTaskButtonProps,
+  BackButtonProps,
+  RegulerButtonProps,
+} from "@/utils/types/buttonType";
+import Link from "next/link";
+import { Button } from "flowbite-react";
 
-const AddTaskButton = () => {
+const AddTaskButton = ({ onSetToggle }: AddTaskDropDownButtonProps) => {
   return (
     <>
-      <button className="flex bg-red-orange py-[12px] px-[15px] gap-x-2 rounded-[60px]">
+      <button
+        className="flex bg-red-orange py-[12px] px-[15px] gap-x-2 rounded-[60px]"
+        onClick={onSetToggle}
+      >
         <Image
           src={AddTaskIcon}
           width={1000}
@@ -60,12 +73,14 @@ const SortingButton = ({ onSetToggle, onHidden }: ButtonProps) => {
 const TaskDropDownButton = ({
   onSetToggle,
   onHidden,
+  onFocus,
 }: TaskDropDownButtonProps) => {
+  // console.log("Other Hidden:", onHidden)
   return (
     <>
       <button onClick={onSetToggle}>
         <Image
-          src={onHidden ? ArrowDown : ArrowUpGray}
+          src={onFocus || onHidden ? ArrowDown : ArrowUpGray}
           alt="Task dropdown button"
           width={1000}
           height={1000}
@@ -125,6 +140,45 @@ const MoreButton = () => {
   );
 };
 
+const DoneTaskButton = ({ onSetToggle, onHidden }: DoneTaskButtonProps) => {
+  return (
+    <>
+      <button onClick={onSetToggle}>
+        <Image
+          src={!onHidden ? ArrowRight : ArrowUpGray}
+          alt="Right arrow"
+          width={1000}
+          height={1000}
+          className={"w-[12px] h-[10px]"}
+        />
+      </button>
+    </>
+  );
+};
+
+const BackButton = ({ onRoute, title }: BackButtonProps) => {
+  return (
+    <>
+      <Link
+        href={onRoute}
+        className="bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium px-3 py-2 text-xs rounded-lg"
+      >
+        Back to {title}
+      </Link>
+    </>
+  );
+};
+
+const RegulerButton = ({ onAction, onsSetAction, title }: RegulerButtonProps) => {
+  return (
+    <>
+      <Button pill={true} className="bg-red-orange hover:bg-red-orange-dark" onClick={onsSetAction}>
+        {title}
+      </Button>
+    </>
+  );
+};
+
 export {
   AddTaskButton,
   SortingButton,
@@ -132,4 +186,7 @@ export {
   AddSubTaskButton,
   DeleteSubTaskButton,
   MoreButton,
+  DoneTaskButton,
+  BackButton,
+  RegulerButton,
 };
