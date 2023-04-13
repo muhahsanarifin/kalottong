@@ -12,7 +12,7 @@ const config = (accessToken: TokenProps) => {
   };
 };
 
-export const login = (body: BodyProps) =>
+export const login = ({...body}: BodyProps) =>
   Axios.post(`${BASE_URL}/auth/login`, body);
 
 export const logout = (accessToken: TokenProps) =>
