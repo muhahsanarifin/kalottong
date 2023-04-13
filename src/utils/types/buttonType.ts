@@ -18,3 +18,14 @@ export type DoneTaskButtonProps = {
   onSetToggle: any;
   onHidden?: boolean;
 };
+
+export type BackButtonProps = {
+  onRoute: string;
+  title: string;
+};
+
+export type RegulerButtonProps = {
+  onAction?: any;
+  onsSetAction?: any;
+  title: string;
+};
