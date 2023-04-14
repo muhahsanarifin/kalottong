@@ -3,6 +3,9 @@ import { Button, Label, TextInput, Checkbox, Radio } from "flowbite-react";
 import { FormProps } from "@/utils/types/formType";
 import Link from "next/link";
 import { RegulerButton } from "./Button";
+import { register, login } from "@/utils/api/auth";
+import { SpinnerLoader, ErrorMessage } from "./Feed";
+import { setCookie } from "cookies-next";
 
 const SortingDropDown = ({ onHidden }: FormProps) => {
   return (
@@ -62,34 +65,85 @@ const SortingDropDown = ({ onHidden }: FormProps) => {
 };
 
 const RegisterForm = () => {
-  const [email, setEmail] = useState("");
+  const [agree, setAgree] = useState<boolean>(false);
+  const [loader, setLoader] = useState<boolean>(false);
+  const [errorResponse, setErrorResponse] = useState<any>("");
 
-  console.log("email:", email);
+  const [body, setBody] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    gender_id: "",
+  });
+
+  const handleRegister = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      setLoader(true);
+      const registerResponse = await register({
+        email: body.email,
+        password: body.password,
+        confirmPassword: body.confirmPassword,
+        gender_id: body.gender_id,
+      });
+
+      setErrorResponse(false);
+
+      if (registerResponse.status === 201) {
+        const loginResponse = await login({
+          email: registerResponse.data.data[0].email,
+          password: body.password,
+        });
+
+        setCookie("data-user", JSON.stringify(loginResponse.data.data));
+
+        window.location.replace("/home");
+      }
+    } catch (error: any) {
+      console.error(error.response.data.msg);
+      setErrorResponse(error.response.data.msg);
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const handleInput = (e: any) => {
+    setBody({ ...body, [e.target.name]: e.target.value });
+  };
+
   return (
     <>
-      <form className="flex flex-col gap-4 w-1/2">
+      <form className="flex flex-col gap-4 w-1/2" onSubmit={handleRegister}>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="email" value="Your email" />
           </div>
           <TextInput
+            name="email"
             id="email"
             type="email"
             placeholder="name@kalottong.com"
-            required={true}
             shadow={true}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleInput}
+            color={
+              errorResponse === "Email has been registered" ? "failure" : "gray"
+            }
           />
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="password2" value="Your password" />
+            <Label htmlFor="password" value="Your password" />
           </div>
           <TextInput
-            id="password2"
+            name="password"
+            id="password"
             type="password"
-            required={true}
             shadow={true}
+            onChange={handleInput}
+            color={
+              errorResponse === "Password does not match" ? "failure" : "gray"
+            }
           />
         </div>
         <div>
@@ -97,11 +151,18 @@ const RegisterForm = () => {
             <Label htmlFor="repeat-password" value="Repeat password" />
           </div>
           <TextInput
-            id="repeat-password"
+            name="confirmPassword"
+            id="confirmPassword"
             type="password"
-            required={true}
             shadow={true}
+            onChange={handleInput}
+            color={
+              errorResponse === "Password does not match" ? "failure" : "gray"
+            }
           />
+        </div>
+        <div className="flex justify-center">
+          {errorResponse ? <ErrorMessage msg={errorResponse} /> : null}
         </div>
         <div>
           <fieldset className="flex gap-4" id="radio">
@@ -109,17 +170,27 @@ const RegisterForm = () => {
               Choose gender
             </legend>
             <div className="flex items-center gap-2">
-              <Radio id="man" name="gender" value="man" />
+              <Radio
+                id="man"
+                name="gender_id"
+                value={1}
+                onChange={handleInput}
+              />
               <Label htmlFor="man">Man</Label>
             </div>
             <div className="flex items-center gap-2">
-              <Radio id="women" name="gender" value="women" />
+              <Radio
+                id="women"
+                name="gender_id"
+                value={2}
+                onChange={handleInput}
+              />
               <Label htmlFor="women">Women</Label>
             </div>
           </fieldset>
         </div>
         <div className="flex items-center gap-2">
-          <Checkbox id="agree" />
+          <Checkbox id="agree" onChange={(e) => setAgree(e.target.checked)} />
           <Label htmlFor="agree">
             I agree with the {""}
             <Link href="#" className="text-red-orange hover:underline">
@@ -130,8 +201,9 @@ const RegisterForm = () => {
         <Button
           type="submit"
           className="bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:ring-red-orange-light"
+          disabled={Object.values(body).includes("") || !agree || loader}
         >
-          Register new account
+          {loader ? <SpinnerLoader /> : <span>Register new account</span>}
         </Button>
       </form>
     </>
