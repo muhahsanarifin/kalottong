@@ -34,14 +34,18 @@ export const AuthModal = ({ onShow, onSetClose }: AuthModalProps) => {
         password: password.current.value,
       });
 
-      console.log("Another response:", response);
       if (response.status === 200) {
         setCookie("data-user", JSON.stringify(response.data.data));
         if (remember === true) {
           setItemLocalStorage("email-user", response.data.data?.email);
         }
       }
+
+      setErrorResponse(false); // If fulfilled element of "Error" response which trigger by the stage is going to set "false".
+
+      window.location.reload();
     } catch (error: any) {
+      console.error(error.response.data.msg);
       setErrorResponse(error.response.data.msg);
     } finally {
       setLoader(false);
@@ -53,8 +57,8 @@ export const AuthModal = ({ onShow, onSetClose }: AuthModalProps) => {
   };
 
   useEffect(() => {
-    const coba = getItemLocalStorage("email-user");
-    setDisplayEmail(coba);
+    const data = getItemLocalStorage("email-user");
+    setDisplayEmail(data);
   }, []);
 
   const toClear = () => {
