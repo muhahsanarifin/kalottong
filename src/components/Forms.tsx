@@ -247,11 +247,11 @@ const ResetPasswordForm: React.FC = () => {
     <>
       <label
         htmlFor="input-group-1"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white w-1/2 mx-auto"
+        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
       >
         Your Email
       </label>
-      <div className="relative mb-6 w-1/2 mx-auto flex gap-x-2">
+      <div className="relative mb-6 flex gap-x-2">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <svg
             aria-hidden="true"
