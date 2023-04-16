@@ -95,7 +95,7 @@ export const WelcomeMessage: React.FC = () => {
                 </h1>
 
                 <p className="mt-4 text-gray-500">
-                  We can&apos;t find that view content. Please, login!
+                  We can&apos;t find the view content. Please, login!
                 </p>
               </div>
             </div>

@@ -54,7 +54,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
     }
   };
 
-  const handleRemember = () => {
+  const handleRemember = (e: any) => {
+    // console.log("Element:", e);
     setRemember(!remember);
   };
 
@@ -66,6 +67,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
   const toClear = () => {
     removeItemLocalStorage("email-user");
     window.location.reload();
+  };
+
+  // Add onKeyDown event for utilize keyboard and set it when it's key equal tu "Enter" the handleEnter function is going to be executed.
+  const handleEnter = (e: any) => {
+    // console.log("Result:", e);
+    // console.log("Id:", e.target.id);
+
+    if (e.key === "Enter") {
+      if (e.target.id === "remember") setRemember(true);
+
+      return handleLogin();
+    }
   };
 
   return (
@@ -100,6 +113,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
                 }`}
                 value={displayEmail}
                 onChange={() => setDisplayEmail(displayEmail)}
+                onKeyDown={handleEnter}
               />
             </div>
             <div>
@@ -115,6 +129,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
                   errorResponse === "Wrong password" &&
                   "border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500"
                 }`}
+                onKeyDown={handleEnter}
               />
             </div>
             <div className="flex justify-center">
@@ -132,7 +147,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Checkbox id="remember" onClick={handleRemember} />
+                  <Checkbox
+                    id="remember"
+                    onClick={handleRemember}
+                    onKeyDown={handleEnter}
+                    checked={remember}
+                  />
                   <Label htmlFor="remember">Remember me</Label>
                 </div>
               )}
@@ -149,6 +169,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
                   loader && "cursor-not-allowed"
                 }`}
                 onClick={handleLogin}
+                onKeyDown={handleEnter}
               >
                 {loader ? (
                   <SpinnerLoader />
