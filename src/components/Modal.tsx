@@ -8,9 +8,10 @@ import { setCookie } from "cookies-next";
 import {
   setItemLocalStorage,
   getItemLocalStorage,
+  removeItemLocalStorage,
 } from "@/utils/storage/localStorage";
 
-export const AuthModal = ({ onShow, onSetClose }: AuthModalProps) => {
+export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
   const [errorResponse, setErrorResponse] = useState<any>("");
   const [loader, setLoader] = useState<boolean>(false);
   const [remember, setRemember] = useState<boolean>(false);
@@ -35,7 +36,8 @@ export const AuthModal = ({ onShow, onSetClose }: AuthModalProps) => {
       });
 
       if (response.status === 200) {
-        setCookie("data-user", JSON.stringify(response.data.data));
+        // setCookie("data-user", JSON.stringify(response.data.data));
+        setCookie("token", response.data.data?.token);
         if (remember === true) {
           setItemLocalStorage("email-user", response.data.data?.email);
         }
@@ -52,7 +54,7 @@ export const AuthModal = ({ onShow, onSetClose }: AuthModalProps) => {
     }
   };
 
-  const sample = () => {
+  const handleRemember = () => {
     setRemember(!remember);
   };
 
@@ -62,7 +64,7 @@ export const AuthModal = ({ onShow, onSetClose }: AuthModalProps) => {
   }, []);
 
   const toClear = () => {
-    localStorage.clear();
+    removeItemLocalStorage("email-user");
     window.location.reload();
   };
 
@@ -96,7 +98,8 @@ export const AuthModal = ({ onShow, onSetClose }: AuthModalProps) => {
                   errorResponse === "Email is not registered" &&
                   "border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500"
                 }`}
-                value={displayEmail ? displayEmail : null}
+                value={displayEmail}
+                onChange={() => setDisplayEmail(displayEmail)}
               />
             </div>
             <div>
@@ -129,7 +132,7 @@ export const AuthModal = ({ onShow, onSetClose }: AuthModalProps) => {
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Checkbox id="remember" onClick={sample} />
+                  <Checkbox id="remember" onClick={handleRemember} />
                   <Label htmlFor="remember">Remember me</Label>
                 </div>
               )}

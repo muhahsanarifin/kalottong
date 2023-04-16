@@ -9,7 +9,7 @@ import {
 
 import { TaskProps } from "@/utils/types/taskType";
 
-const Task = ({ tasks }: TaskProps) => {
+const Task: React.FC<TaskProps> = ({ tasks }) => {
   // const [done, toggle] = useToggle();
   const [focus, setFocus] = useState<number>();
   const [hidden, setHidden] = useState(true);
@@ -70,7 +70,7 @@ const Task = ({ tasks }: TaskProps) => {
   );
 };
 
-const SubTask = () => {
+const SubTask: React.FC = () => {
   return (
     <>
       <div className="flex items-center">

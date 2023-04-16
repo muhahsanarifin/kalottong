@@ -7,25 +7,29 @@ import ActiveNotificationIcon from "../assets/icons/active-notification.png";
 import OffNotificationIcon from "../assets/icons/off-notification.png";
 import AvatarIcon from "../assets/icons/avatar.png";
 import { AuthModal } from "./Modal";
+import { getCookie } from "cookies-next";
 
-const Header = () => {
+const Header: React.FC = () => {
   const [hiddenClickOutside, setHiddenClickOutside] = useState<Boolean>(true);
   const [hiddenClickInside, setHiddenClickInside] = useState<Boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [accessToken, setAccessToken] = useState<any>();
 
   const handleClickInside = () => {
-    // console.log("Click Inside");
     setHiddenClickInside(false);
   };
 
-  const ref = useRef(null);
+  const userProfile = useRef(null);
   const handleClickOutside = () => {
-    // console.log("Click Outside");
     setHiddenClickInside(true);
     setHiddenClickOutside(!hiddenClickOutside);
   };
+  useOnClickOutside(userProfile, handleClickOutside);
 
-  useOnClickOutside(ref, handleClickOutside);
+  useEffect(() => {
+    const token = getCookie("token");
+    setAccessToken(token);
+  }, []);
 
   return (
     <>
@@ -46,7 +50,7 @@ const Header = () => {
         </section>
         {/* Right header section */}
         <section className="ml-auto flex gap-x-4">
-          {true ? (
+          {!accessToken ? (
             <button
               className="text-white bg-red-orange hover:bg-[#f3551c] text-sm rounded-lg font-medium px-5 py-2.5 focus:ring-4 focus:ring-[#ffb291]"
               onClick={() => setShowModal(!showModal)}
@@ -108,7 +112,7 @@ const Header = () => {
                 </div>
                 {/* Dropdown menu */}
                 <div
-                  ref={ref}
+                  ref={userProfile}
                   className={
                     hiddenClickInside || hiddenClickOutside
                       ? "hidden"
@@ -122,7 +126,7 @@ const Header = () => {
                   <ul className="py-2 text-sm text-gray-700">
                     <li>
                       <Link
-                        href="#"
+                        href="/users/profile"
                         className="block px-4 py-2 hover:bg-gray-100"
                       >
                         Settings

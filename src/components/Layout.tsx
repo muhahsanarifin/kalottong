@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { TitleProps } from "../utils/types/titleType";
 
-const TitleHome = ({ children }: TitleProps) => {
+const TitleHome: React.FC<TitleProps> = ({ children }) => {
   return (
     <>
       <Head>
@@ -14,7 +14,7 @@ const TitleHome = ({ children }: TitleProps) => {
   );
 };
 
-const TitleProfile = ({ children }: TitleProps) => {
+const TitleProfile: React.FC<TitleProps> = ({ children }) => {
   return (
     <>
       <Head>
@@ -27,7 +27,7 @@ const TitleProfile = ({ children }: TitleProps) => {
   );
 };
 
-const TitleRegister = ({ children }: TitleProps) => {
+const TitleRegister: React.FC<TitleProps> = ({ children }) => {
   return (
     <>
       <Head>
@@ -40,7 +40,7 @@ const TitleRegister = ({ children }: TitleProps) => {
   );
 };
 
-const TitleForgetPassword = ({ children }: TitleProps) => {
+const TitleForgetPassword: React.FC<TitleProps> = ({ children }) => {
   return (
     <>
       <Head>

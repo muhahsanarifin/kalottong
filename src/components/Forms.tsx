@@ -7,7 +7,7 @@ import { register, login } from "@/utils/api/auth";
 import { SpinnerLoader, ErrorMessage } from "./Feed";
 import { setCookie } from "cookies-next";
 
-const SortingDropDown = ({ onHidden }: FormProps) => {
+const SortingDropDown: React.FC<FormProps> = ({ onHidden }) => {
   return (
     <>
       <ul
@@ -64,7 +64,7 @@ const SortingDropDown = ({ onHidden }: FormProps) => {
   );
 };
 
-const RegisterForm = () => {
+const RegisterForm: React.FC = () => {
   const [agree, setAgree] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [errorResponse, setErrorResponse] = useState<any>("");
@@ -96,7 +96,8 @@ const RegisterForm = () => {
           password: body.password,
         });
 
-        setCookie("data-user", JSON.stringify(loginResponse.data.data));
+        // setCookie("data-user", JSON.stringify(loginResponse.data.data));
+        setCookie("token", loginResponse.data.data?.token);
 
         window.location.replace("/home");
       }
@@ -112,9 +113,26 @@ const RegisterForm = () => {
     setBody({ ...body, [e.target.name]: e.target.value });
   };
 
+  const toClear = () => {
+    setBody({
+      email: "",
+      password: "",
+      confirmPassword: "",
+      gender_id: "",
+    });
+
+    setAgree(false);
+
+    (document.querySelector("#form") as HTMLFormElement).reset();
+  };
+
   return (
     <>
-      <form className="flex flex-col gap-4 w-1/2" onSubmit={handleRegister}>
+      <form
+        className="flex flex-col gap-4 w-1/2"
+        id="form"
+        onSubmit={handleRegister}
+      >
         <div>
           <div className="mb-2 block">
             <Label htmlFor="email" value="Your email" />
@@ -199,6 +217,20 @@ const RegisterForm = () => {
           </Label>
         </div>
         <Button
+          className={`${
+            !body.email &&
+            !body.password &&
+            !body.confirmPassword &&
+            !body.gender_id &&
+            !agree
+              ? "hidden"
+              : "bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:ring-red-orange-light h-[41.6px] rounded-[8px] text-white text-[14px]"
+          }`}
+          onClick={toClear}
+        >
+          Clear
+        </Button>
+        <Button
           type="submit"
           className="bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:ring-red-orange-light"
           disabled={Object.values(body).includes("") || !agree || loader}
@@ -210,7 +242,7 @@ const RegisterForm = () => {
   );
 };
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm: React.FC = () => {
   return (
     <>
       <label

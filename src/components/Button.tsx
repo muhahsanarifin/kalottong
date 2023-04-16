@@ -18,7 +18,9 @@ import {
 import Link from "next/link";
 import { Button } from "flowbite-react";
 
-const AddTaskButton = ({ onSetToggle }: AddTaskDropDownButtonProps) => {
+const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
+  onSetToggle,
+}) => {
   return (
     <>
       <button
@@ -38,7 +40,7 @@ const AddTaskButton = ({ onSetToggle }: AddTaskDropDownButtonProps) => {
   );
 };
 
-const SortingButton = ({ onSetToggle, onHidden }: ButtonProps) => {
+const SortingButton: React.FC<ButtonProps> = ({ onSetToggle, onHidden }) => {
   return (
     <>
       <button
@@ -70,11 +72,11 @@ const SortingButton = ({ onSetToggle, onHidden }: ButtonProps) => {
   );
 };
 
-const TaskDropDownButton = ({
+const TaskDropDownButton: React.FC<TaskDropDownButtonProps> = ({
   onSetToggle,
   onHidden,
   onFocus,
-}: TaskDropDownButtonProps) => {
+}) => {
   // console.log("Other Hidden:", onHidden)
   return (
     <>
@@ -91,7 +93,7 @@ const TaskDropDownButton = ({
   );
 };
 
-const AddSubTaskButton = () => {
+const AddSubTaskButton: React.FC = () => {
   return (
     <>
       <button className="flex items-center gap-x-2 border-solid border-2 border-[#CCCED2] py-[6px] px-[10px] rounded-[50px] ml-auto">
@@ -108,7 +110,7 @@ const AddSubTaskButton = () => {
   );
 };
 
-const DeleteSubTaskButton = () => {
+const DeleteSubTaskButton: React.FC = () => {
   return (
     <>
       <button>
@@ -124,7 +126,7 @@ const DeleteSubTaskButton = () => {
   );
 };
 
-const MoreButton = () => {
+const MoreButton: React.FC = () => {
   return (
     <>
       <button>
@@ -140,7 +142,10 @@ const MoreButton = () => {
   );
 };
 
-const DoneTaskButton = ({ onSetToggle, onHidden }: DoneTaskButtonProps) => {
+const DoneTaskButton: React.FC<DoneTaskButtonProps> = ({
+  onSetToggle,
+  onHidden,
+}) => {
   return (
     <>
       <button onClick={onSetToggle}>
@@ -156,7 +161,7 @@ const DoneTaskButton = ({ onSetToggle, onHidden }: DoneTaskButtonProps) => {
   );
 };
 
-const BackButton = ({ onRoute, title }: BackButtonProps) => {
+const BackButton: React.FC<BackButtonProps> = ({ onRoute, title }) => {
   return (
     <>
       <Link
@@ -169,10 +174,18 @@ const BackButton = ({ onRoute, title }: BackButtonProps) => {
   );
 };
 
-const RegulerButton = ({ onAction, onsSetAction, title }: RegulerButtonProps) => {
+const RegulerButton: React.FC<RegulerButtonProps> = ({
+  onAction,
+  onsSetAction,
+  title,
+}) => {
   return (
     <>
-      <Button pill={true} className="bg-red-orange hover:bg-red-orange-dark" onClick={onsSetAction}>
+      <Button
+        pill={true}
+        className="bg-red-orange hover:bg-red-orange-dark"
+        onClick={onsSetAction}
+      >
         {title}
       </Button>
     </>

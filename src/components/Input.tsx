@@ -2,7 +2,7 @@ import Image from "next/image";
 import Menu from "../assets/icons/menu.png"
 import Calender from "../assets/icons/calendar.png"
 
-const InputTask = () => {
+const InputTask: React.FC = () => {
   return (
     <>
       <div className="flex gap-x-4">
