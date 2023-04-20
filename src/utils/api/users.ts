@@ -20,3 +20,6 @@ export const editProfile = (accessToken: TokenProps, body: BodyProps) =>
 
 export const uploadImageProfile = (accessToken: TokenProps, body: BodyProps) =>
   Axios.patch(`${BASE_URL}/users/profile/upload`, body, config(accessToken));
+
+export const editNoTelp = (accessToken: TokenProps, body: BodyProps) =>
+  Axios.patch(`${BASE_URL}/users/notelp/edit`, body, config(accessToken));
