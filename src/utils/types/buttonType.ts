@@ -1,4 +1,4 @@
-export type ButtonProps = {
+export type SortingButtonProps = {
   onSetToggle: any;
   onHidden?: boolean;
 };
@@ -25,7 +25,7 @@ export type BackButtonProps = {
 };
 
 export type RegulerButtonProps = {
-  onAction?: any;
   onsSetAction?: any;
   title: string;
+  onDisable: boolean;
 };
