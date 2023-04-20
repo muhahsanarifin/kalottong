@@ -1,3 +1,3 @@
-export type FormProps = {
+export type SortingDropDownsProps = {
   onHidden: boolean;
 };
