@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Button, Label, TextInput, Checkbox, Radio } from "flowbite-react";
-import { FormProps } from "@/utils/types/formType";
+import { SortingDropDownsProps } from "@/utils/types/formType";
 import Link from "next/link";
 import { RegulerButton } from "./Button";
 import { register, login } from "@/utils/api/auth";
 import { SpinnerLoader, ErrorMessage } from "./Feed";
 import { setCookie } from "cookies-next";
 
-const SortingDropDown: React.FC<FormProps> = ({ onHidden }) => {
+const SortingDropDown: React.FC<SortingDropDownsProps> = ({ onHidden }) => {
   return (
     <>
       <ul
@@ -243,6 +243,7 @@ const RegisterForm: React.FC = () => {
 };
 
 const ResetPasswordForm: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
   return (
     <>
       <label
@@ -269,10 +270,12 @@ const ResetPasswordForm: React.FC = () => {
           id="input-group-1"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="name@flowbite.com"
+          onChange={(e) => setEmail(e.target.value)}
         />
         <RegulerButton
           title="Submit"
           onsSetAction={() => console.log("Test")}
+          onDisable={!email}
         />
       </div>
     </>
