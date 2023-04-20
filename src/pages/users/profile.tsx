@@ -1,47 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TitleProfile } from "@/components/Layout";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Breadcrumb from "@/components/Breadcrumb";
+import { InputProfile } from "@/components/Input";
+import { SaveInputProfileButton } from "@/components/Button";
+import { useSelector, useDispatch } from "react-redux";
+import { usersAction } from "../../redux/reducers/users";
+import { getCookie } from "cookies-next";
+import type { RootState } from "@/redux/store";
 
 const Profile = () => {
+  const dispatch = useDispatch<any>();
+  const [disable, setDisable] = useState<boolean>(true);
+  const profile = useSelector((state: RootState) => state.user.retriveProfile);
+  const [firstname, setFirstName] = useState<string>("");
+  const [lastname, setLastname] = useState<string>("");
+  const [notelp, setNoTelp] = useState<string>("");
+
   const handleFirstname = (e: any) => {
-    console.log(e.target.value);
-    console.log(
-      ((document.getElementById("firstnameDisplay") as HTMLElement).innerHTML =
-        e.target.value)
-    );
+    // console.log(e.target.value);
+    setFirstName(e.target.value);
   };
 
   const handleLastname = (e: any) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
+    setLastname(e.target.value);
   };
+
+  const handleNoTelp = (e: any) => {
+    // console.log(e.target.value);
+    setNoTelp(e.target.value);
+  };
+
+  // Test retrive data profile
+  useEffect(() => {
+    dispatch(usersAction.retriveProfileThunk(getCookie("token")));
+  }, [dispatch]);
+
+  // console.log("user:", profile);
+  // console.log("image:", profile.image);
+  // console.log("email:", profile.email);
+  // console.log("firstname:", profile.firstname);
+  // console.log("lastname:", profile.lastname);
+  // console.log("gender:", profile.gender);
 
   return (
     <>
       <TitleProfile>
         <header className="flex">
-          <Breadcrumb page="Profile"/>
+          <Breadcrumb page="Profile" />
         </header>
         <main className="min-h-screen">
           <div className="h-min flex flex-col m-auto gap-2 py-4 xs:py-0">
             <a
               href="#"
-              className="group relative block bg-white rounded-lg p-4 shadow-sm shadow-indigo-100 mx-auto w-[50%] h-full"
+              className="group relative block bg-white rounded-lg p-4 shadow-[0_16px_90px_rgba(19,7,52,0.08)] mx-auto w-[50%] h-full"
             >
-              {false ? (
+              {true ? (
                 <Image
                   alt="Developer"
-                  src=""
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_CLOUDNIARY}${profile.image}`}
                   className="absolute inset-0 h-full w-full object-cover opacity-75 transition-opacity group-hover:opacity-50"
                   width={500}
                   height={500}
+                  priority
                 />
               ) : (
-                // <h1 className="absolute inset-0 h-full w-full object-cover opacity-75 transition-opacity group-hover:opacity-50">
-                //   Image not found
-                // </h1>
                 <Icon
                   icon="material-symbols:frame-person"
                   className="absolute inset-0 h-[50%] w-[50%] object-cover opacity-75 transition-opacity group-hover:opacity-50 text-gray-100 m-auto"
@@ -49,26 +75,11 @@ const Profile = () => {
               )}
 
               <div className="relative p-4 sm:p-6 lg:p-8">
-                <p className="text-sm font-medium uppercase tracking-widest text-red-orange">
+                <p className="text-xs font-bold uppercase tracking-widest text-red-orange">
                   accan@gmail.com
                 </p>
-
-                <p className="text-xl font-bold text-gray-900 sm:text-2xl">
-                  <span id="firstnameDisplay" className="firstname">
-                    MUH
-                  </span>{" "}
-                  <span className="lastnameDisplay">AHSAN</span>
-                </p>
-
                 <div className="mt-32 sm:mt-48 lg:mt-64">
                   <div className="translate-y-8 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">
-                    {/* <p className="text-sm text-white">
-                      Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                      Omnis perferendis hic asperiores quibusdam quidem
-                      voluptates doloremque reiciendis nostrum harum.
-                      Repudiandae?
-                    </p> */}
-
                     <div className="flex items-center justify-center w-full">
                       <label
                         htmlFor="dropzone-file"
@@ -97,7 +108,7 @@ const Profile = () => {
                             or drag and drop
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
-                            SVG, PNG, JPG or GIF (MAX. 800x400px)
+                            JPEG, JPG, PNG or WEBP (MAX file size. 200kb)
                           </p>
                         </div>
                         <input
@@ -111,53 +122,56 @@ const Profile = () => {
                 </div>
               </div>
             </a>
-            <fieldset className="bg-white rounded-lg p-4 shadow-sm shadow-indigo-100 mx-auto w-[50%] p-2 flex flex-col gap-y-2">
-              <legend className="text-red-orange font-bold">
-                Edit profile:
+            <fieldset className="bg-white rounded-lg shadow-[0_16px_90px_rgba(19,7,52,0.08)] mx-auto w-[50%] p-2 flex flex-col gap-y-2">
+              <legend className="flex">
+                <button onClick={() => setDisable(!disable)}>
+                  <Icon
+                    icon="material-symbols:edit"
+                    className="h-[18px] w-[18px] text-red-orange hover:text-red-orange-dark"
+                  />
+                </button>
               </legend>
-              <div className="relative">
-                <input
-                  type="text"
-                  id="email"
-                  className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                  placeholder=" "
+              <div className="relative flex items-center gap-x-2">
+                <InputProfile
+                  onType="text"
+                  onTitle="Firstname"
+                  onId="firstname"
+                  setOnChange={handleFirstname}
+                  onDisable={disable}
+                  onHtmlFor="firstname"
                 />
-                <label
-                  htmlFor="email"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >
-                  Email
-                </label>
+                <SaveInputProfileButton
+                  onSetAction={() => console.log("Test")}
+                  onDisable={disable || !firstname}
+                />
               </div>
-              <div className="relative">
-                <input
-                  type="text"
-                  id="firstname"
-                  className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                  placeholder=" "
-                  onChange={handleFirstname}
+              <div className="relative flex items-center gap-x-2">
+                <InputProfile
+                  onType="text"
+                  onTitle="Lastname"
+                  onId="lastname"
+                  setOnChange={handleLastname}
+                  onDisable={disable}
+                  onHtmlFor="lastname"
                 />
-                <label
-                  htmlFor="firstname"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >
-                  Firstname
-                </label>
+                <SaveInputProfileButton
+                  onSetAction={() => console.log("Test")}
+                  onDisable={disable || !lastname}
+                />
               </div>
-              <div className="relative">
-                <input
-                  type="text"
-                  id="lastname"
-                  className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                  placeholder=" "
-                  onChange={handleLastname}
+              <div className="relative flex items-center gap-x-2">
+                <InputProfile
+                  onType="number"
+                  onTitle="No Telp"
+                  onId="notelp"
+                  setOnChange={handleNoTelp}
+                  onDisable={disable}
+                  onHtmlFor="notelp"
                 />
-                <label
-                  htmlFor="lastname"
-                  className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-gray-900 px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1"
-                >
-                  Lastname
-                </label>
+                <SaveInputProfileButton
+                  onSetAction={() => console.log("Test")}
+                  onDisable={disable || !notelp}
+                />
               </div>
             </fieldset>
           </div>
