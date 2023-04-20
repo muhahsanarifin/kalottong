@@ -108,8 +108,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
                 type="email"
                 placeholder="name@company.com"
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 ${
-                  errorResponse === "Email is not registered" &&
-                  "border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500"
+                  errorResponse === "Email is not registered" ||
+                  (errorResponse === "Required email" &&
+                    "border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500")
                 }`}
                 value={displayEmail}
                 onChange={() => setDisplayEmail(displayEmail)}
@@ -126,8 +127,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
                 id="password"
                 type="password"
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 ${
-                  errorResponse === "Wrong password" &&
-                  "border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500"
+                  errorResponse === "Wrong password" ||
+                  (errorResponse === "Required password" &&
+                    "border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500")
                 }`}
                 onKeyDown={handleEnter}
               />
