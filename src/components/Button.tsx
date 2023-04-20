@@ -7,8 +7,9 @@ import ArrowUpGray from "../assets/icons/arrow-up-2-gray.png";
 import ArrowRight from "../assets/icons/arrow-right-2.png";
 import TrashIcon from "../assets/icons/trash.png";
 import MoreIcon from "../assets/icons/more-vertical.png";
+import { Icon } from "@iconify/react";
 import {
-  ButtonProps,
+  SortingButtonProps,
   TaskDropDownButtonProps,
   AddTaskDropDownButtonProps,
   DoneTaskButtonProps,
@@ -40,7 +41,10 @@ const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
   );
 };
 
-const SortingButton: React.FC<ButtonProps> = ({ onSetToggle, onHidden }) => {
+const SortingButton: React.FC<SortingButtonProps> = ({
+  onSetToggle,
+  onHidden,
+}) => {
   return (
     <>
       <button
@@ -175,19 +179,43 @@ const BackButton: React.FC<BackButtonProps> = ({ onRoute, title }) => {
 };
 
 const RegulerButton: React.FC<RegulerButtonProps> = ({
-  onAction,
   onsSetAction,
   title,
+  onDisable,
 }) => {
   return (
     <>
       <Button
         pill={true}
-        className="bg-red-orange hover:bg-red-orange-dark"
+        className={`bg-red-orange hover:bg-red-orange-dark ${
+          onDisable && "cursor-not-allowed"
+        }`}
         onClick={onsSetAction}
+        disabled={onDisable}
       >
         {title}
       </Button>
+    </>
+  );
+};
+
+const SaveInputProfileButton: React.FC<{
+  onSetAction?: any;
+  onDisable: any;
+}> = ({ onSetAction, onDisable }) => {
+  return (
+    <>
+      <button
+        type="button"
+        className={`text-white bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:outline-none focus:ring-red-orange-light font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center h-[38.6px] ${
+          onDisable && "hidden"
+        }`}
+        onClick={onSetAction}
+        disabled={onDisable}
+      >
+        <Icon icon="ri:save-line" className="w-4 h-4 mr-2 -ml-1" />
+        Save
+      </button>
     </>
   );
 };
@@ -202,4 +230,5 @@ export {
   DoneTaskButton,
   BackButton,
   RegulerButton,
+  SaveInputProfileButton,
 };
