@@ -12,11 +12,11 @@ const config = (accessToken: TokenProps) => {
   };
 };
 
-export const login = ({...body}: BodyProps) =>
+export const login = ({ ...body }: BodyProps) =>
   Axios.post(`${BASE_URL}/auth/login`, body);
 
-export const logout = (accessToken: TokenProps) =>
-  Axios.post(`${BASE_URL}/auth/logout`, config(accessToken));
+export const logout = (accessToken: any) =>
+  Axios.delete(`${BASE_URL}/auth/logout`, config(accessToken));
 
-export const register = ({...body}: BodyProps) =>
+export const register = ({ ...body }: BodyProps) =>
   Axios.post(`${BASE_URL}/auth/register`, body);
