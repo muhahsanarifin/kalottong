@@ -208,12 +208,12 @@ export const LogoutModal: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
     try {
       setLoading(true);
       const response = await logout(getCookie("token"));
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         deleteCookie("token");
         window.location.reload();
       }
-      console.log("Repsonse:", response);
+      // console.log("Repsonse:", response);
     } catch (error: any) {
       console.error(error);
     } finally {
