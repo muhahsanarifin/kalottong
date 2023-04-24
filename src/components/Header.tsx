@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, use } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,14 +6,15 @@ import KalottongLogo from "../assets/icons/kalottong.svg";
 import ActiveNotificationIcon from "../assets/icons/active-notification.png";
 import OffNotificationIcon from "../assets/icons/off-notification.png";
 import AvatarIcon from "../assets/icons/avatar.png";
-import { AuthModal } from "./Modal";
+import { AuthModal, LogoutModal } from "./Modal";
 import { getCookie } from "cookies-next";
 
 const Header: React.FC = () => {
   const [hiddenClickOutside, setHiddenClickOutside] = useState<Boolean>(true);
   const [hiddenClickInside, setHiddenClickInside] = useState<Boolean>(true);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<any>();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleClickInside = () => {
     setHiddenClickInside(false);
@@ -33,10 +34,14 @@ const Header: React.FC = () => {
 
   return (
     <>
+      {/* Modal */}
       <AuthModal
-        onShow={showModal}
-        onSetClose={() => setShowModal(!showModal)}
+        onShow={showAuthModal}
+        onSetClose={() => setShowAuthModal(false)}
       />
+      {showLogoutModal && (
+        <LogoutModal onSetShow={() => setShowLogoutModal(!showLogoutModal)} />
+      )}
       <header className="flex items-center">
         {/* Left header section */}
         <section>
@@ -53,7 +58,7 @@ const Header: React.FC = () => {
           {!accessToken ? (
             <button
               className="text-white bg-red-orange hover:bg-[#f3551c] text-sm rounded-lg font-medium px-5 py-2.5 focus:ring-4 focus:ring-[#ffb291]"
-              onClick={() => setShowModal(!showModal)}
+              onClick={() => setShowAuthModal(true)}
             >
               Login
             </button>
@@ -134,12 +139,12 @@ const Header: React.FC = () => {
                     </li>
                   </ul>
                   <div className="py-2">
-                    <Link
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-[100%] text-left"
+                      onClick={() => setShowLogoutModal(!showAuthModal)}
                     >
                       Sign out
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>

@@ -5,10 +5,10 @@ import {
   getItemLocalStorage,
 } from "@/utils/storage/localStorage";
 
-export const SpinnerLoader: React.FC = () => {
+export const SpinnerLoader: React.FC<{ onClassName: string }> = ({onClassName}) => {
   return (
     <>
-      <Spinner size="md" className="fill-red-orange" />
+      <Spinner size="md" className={onClassName} />
     </>
   );
 };
