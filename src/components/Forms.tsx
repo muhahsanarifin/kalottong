@@ -235,7 +235,11 @@ const RegisterForm: React.FC = () => {
           className="bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:ring-red-orange-light"
           disabled={Object.values(body).includes("") || !agree || loader}
         >
-          {loader ? <SpinnerLoader /> : <span>Register new account</span>}
+          {loader ? (
+            <SpinnerLoader onClassName={"fill-red-orange"} />
+          ) : (
+            <span>Register new account</span>
+          )}
         </Button>
       </form>
     </>
