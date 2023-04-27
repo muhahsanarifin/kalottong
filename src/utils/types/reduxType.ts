@@ -9,3 +9,8 @@ export type TasksState = {
 export type SubtasksState = {
   [key: string]: any;
 };
+
+// Users
+export type ArgProfileThunk = {
+  [key: string]: any;
+};

@@ -1,19 +1,15 @@
-export type TokenProps = {
-  accessToken: any;
-};
-
-export type BodyProps = {
+export type BodyArg = {
   [key: string]: any;
 };
 
-export type ParamsProps = {
+export type ParamsArg = {
   params: string | number;
 };
 
-export type IdTasksProps = {
+export type IdTasksArg = {
   id: string | number;
 };
 
-export type IdSubtasksProps = {
+export type IdSubtasksArg = {
   id: string | number;
 };

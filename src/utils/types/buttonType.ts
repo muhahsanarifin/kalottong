@@ -25,7 +25,19 @@ export type BackButtonProps = {
 };
 
 export type RegulerButtonProps = {
-  onsSetAction?: any;
+  onSetAction?: any;
   title: string;
   onDisable: boolean;
+};
+
+export type SaveInputProfileButtonProps = {
+  onSetAction?: any;
+  onDisable: any;
+  onLoading?: boolean;
+};
+
+export type SaveImageProfileButtonProps = {
+  onSetAction: any;
+  onDisable?: boolean;
+  onLoading?: boolean;
 };
