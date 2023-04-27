@@ -1,16 +1,15 @@
 import Axios from "axios";
 
 import {
-  TokenProps,
-  BodyProps,
-  ParamsProps,
-  IdTasksProps,
-  IdSubtasksProps,
+  BodyArg,
+  ParamsArg,
+  IdTasksArg,
+  IdSubtasksArg,
 } from "../types/apiType";
 
 const BASE_URL = process.env.NEXT_PUBLIC_KALOTTONG_BACK_END;
 
-const config = (accessToken: TokenProps) => {
+const config = (accessToken: any) => {
   return {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -18,20 +17,14 @@ const config = (accessToken: TokenProps) => {
   };
 };
 
-export const retriveSubtasks = (
-  accessToken: TokenProps,
-  params: ParamsProps,
-  id: IdTasksProps
-) => Axios.get(`${BASE_URL}/subtasks/${id}?${params}`, config(accessToken));
+export const retriveSubtasks = (accessToken: any, params: ParamsArg, id: IdTasksArg) =>
+  Axios.get(`${BASE_URL}/subtasks/${id}?${params}`, config(accessToken));
 
-export const createSubtasks = (accessToken: TokenProps, body: BodyProps) =>
+export const createSubtasks = (accessToken: any, body: BodyArg) =>
   Axios.post(`${BASE_URL}/subtasks/create`, body, config(accessToken));
 
-export const editSubtasks = (
-  accessToken: TokenProps,
-  body: BodyProps,
-  id: IdSubtasksProps
-) => Axios.patch(`${BASE_URL}/subtasks/edit/${id}`, body, config(accessToken));
+export const editSubtasks = (accessToken: any, body: BodyArg, id: IdSubtasksArg) =>
+  Axios.patch(`${BASE_URL}/subtasks/edit/${id}`, body, config(accessToken));
 
-export const deleteSubtasks = (accessToken: TokenProps, id: IdSubtasksProps) =>
+export const deleteSubtasks = (accessToken: any, id: IdSubtasksArg) =>
   Axios.delete(`${BASE_URL}/subtasks/delete/${id}`, config(accessToken));
