@@ -15,9 +15,12 @@ import {
   DoneTaskButtonProps,
   BackButtonProps,
   RegulerButtonProps,
+  SaveInputProfileButtonProps,
+  SaveImageProfileButtonProps,
 } from "@/utils/types/buttonType";
 import Link from "next/link";
 import { Button } from "flowbite-react";
+import {SpinnerLoader} from "@/components/Feed"
 
 const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
   onSetToggle,
@@ -179,7 +182,7 @@ const BackButton: React.FC<BackButtonProps> = ({ onRoute, title }) => {
 };
 
 const RegulerButton: React.FC<RegulerButtonProps> = ({
-  onsSetAction,
+  onSetAction,
   title,
   onDisable,
 }) => {
@@ -190,7 +193,7 @@ const RegulerButton: React.FC<RegulerButtonProps> = ({
         className={`bg-red-orange hover:bg-red-orange-dark ${
           onDisable && "cursor-not-allowed"
         }`}
-        onClick={onsSetAction}
+        onClick={onSetAction}
         disabled={onDisable}
       >
         {title}
@@ -199,10 +202,11 @@ const RegulerButton: React.FC<RegulerButtonProps> = ({
   );
 };
 
-const SaveInputProfileButton: React.FC<{
-  onSetAction?: any;
-  onDisable: any;
-}> = ({ onSetAction, onDisable }) => {
+const SaveInputProfileButton: React.FC<SaveInputProfileButtonProps> = ({
+  onSetAction,
+  onDisable,
+  onLoading,
+}) => {
   return (
     <>
       <button
@@ -213,8 +217,40 @@ const SaveInputProfileButton: React.FC<{
         onClick={onSetAction}
         disabled={onDisable}
       >
-        <Icon icon="ri:save-line" className="w-4 h-4 mr-2 -ml-1" />
-        Save
+        {onLoading ? (
+          <SpinnerLoader onClassName={"fill-red-orange"} />
+        ) : (
+          <>
+            <Icon icon="ri:save-line" className="w-4 h-4 mr-2 -ml-1" />
+            Save
+          </>
+        )}
+      </button>
+    </>
+  );
+};
+
+const SaveImageProfileButton: React.FC<SaveImageProfileButtonProps> = ({
+  onSetAction,
+  onDisable,
+  onLoading
+}) => {
+  return (
+    <>
+      <button
+        onClick={onSetAction}
+        className={`text-white bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:outline-none focus:ring-red-orange-light font-medium rounded-lg w-[100%] py-3 flex justify-center items-center ${
+          onDisable && "hidden"
+        }`}
+      >
+        {onLoading ? (
+          <SpinnerLoader onClassName={"fill-red-orange"} />
+        ) : (
+          <>
+            <Icon icon="ri:save-line" className="w-4 h-4 mr-2 -ml-1" />
+            Save
+          </>
+        )}
       </button>
     </>
   );
@@ -231,4 +267,5 @@ export {
   BackButton,
   RegulerButton,
   SaveInputProfileButton,
+  SaveImageProfileButton,
 };

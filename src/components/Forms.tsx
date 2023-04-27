@@ -278,7 +278,7 @@ const ResetPasswordForm: React.FC = () => {
         />
         <RegulerButton
           title="Submit"
-          onsSetAction={() => console.log("Test")}
+          onSetAction={() => console.log("Test")}
           onDisable={!email}
         />
       </div>
