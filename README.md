@@ -10,15 +10,9 @@
   <h2 align="center">kalottong</h2>
 
   <p align="center">
-    <!-- <br />
-    <a href="#"><strong>Explore the docs »</strong></a>
-    <br />
-    <br /> -->
-    <a href="#">View Demo</a>
+    <a href="https://kalottong.vercel.app/">View Demo</a>
     ·
-    <a href="#">Report Bug</a>
-    ·
-    <a href="#">Request Feature</a>
+    <a href="https://drive.google.com/drive/folders/1ok97XR1diZpN_yH1DpT79r9Fm00s3gvo?usp=share_link">VIew Features</a>
   </p>
 </div>
 
@@ -34,18 +28,6 @@
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- ABOUT THE PROJECT -->
-<!-- # About The Project  -->
-
-## Features
-
-### Home
-
-<img width="500" height="100%" src="src/assets/images/kalottong.png" alt="Home" style="image-rendering: smooth">
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## Installation
 
 » Clone the repo
@@ -54,5 +36,18 @@
 git clone https://github.com/muhahsanarifin/kalottong.git
 ```
 
+<!-- CONTRIBUTING -->
+
+# Contributing
+
+![GitHub contributors](https://img.shields.io/github/contributors/muhahsanarifin/kalottong?style=flat-square) ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/muhahsanarifin/kalottong?style=flat-square)
+
+1. Fork the Project
+2. Create your new Branch ( `git checkout -b ...` )
+3. Commit your Changes ( `git commit -m '...'` )
+4. Push to the Branch ( `git push origin ...` )
+5. Open a Pull Request
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <p align="center"> <samp><i>&copy; 2022-2023 kalottong</i></samp> </p>
