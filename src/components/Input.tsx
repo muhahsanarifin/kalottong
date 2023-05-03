@@ -1,16 +1,77 @@
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { taskAction } from "@/redux/reducers/tasks";
+import type { AppDispatch } from "@/redux/store";
 import Image from "next/image";
 import Menu from "../assets/icons/menu.png";
 import Calender from "../assets/icons/calendar.png";
-
 const InputTask: React.FC = () => {
+  const useAppDispatch: () => AppDispatch = useDispatch;
+  const dispatch = useAppDispatch();
+
+  const [input, setInput] = useState({
+    title: "",
+    description: "",
+  });
+  const [date, setDate] = useState({ created_at: "" });
+
+  const handleInput = (e: any) => {
+    const { name, value } = e.target;
+
+    if (name === "created_at") {
+      return setDate({ ...date, [name]: new Date(value).toISOString() });
+    }
+    setInput({ ...input, [name]: value });
+  };
+
+  // console.log("Body:", { ...input, ...date });
+  // const validateEmptyString = (currentValue: any) => currentValue !== "";
+  // console.log(Object.values({ ...input, ...date }).every(validateEmptyString));
+
+  const handleEnter = (e: any) => {
+    // console.log(e.key);
+    if (e.key === "Enter") {
+      if (
+        Object.values({ ...input, ...date }).every(
+          (currentValue: any) => currentValue !== ""
+        )
+      ) {
+        // return console.log("Body:", { ...body, ...date });
+        const body = { ...input, ...date };
+
+        const cbPending = () => {
+          console.info("Pending");
+        };
+
+        const cbFulfilled = () => {
+          console.info("Fulfilled");
+          // window.location.reload();
+        };
+
+        const cbFinally = () => {
+          console.info("Finallly");
+        };
+
+        dispatch(
+          taskAction.createTasksThunk({
+            body,
+            cbPending,
+            cbFulfilled,
+            cbFinally,
+          })
+        );
+      } else {
+        console.info("Empty input!");
+      }
+    }
+  };
+
   return (
     <>
       <div className="flex gap-x-4">
         <div>
           <input
             type="checkbox"
-            name=""
-            id=""
             className="rounded-[100%] w-[1.75rem] h-[1.75rem] text-red-orange focus:ring-red-orange"
             disabled
           />
@@ -18,41 +79,51 @@ const InputTask: React.FC = () => {
         <div className="flex flex-col w-[100%]">
           <input
             type="text"
-            name="task"
-            id="task"
+            name="title"
+            id="title"
             placeholder="Masukan nama tugas"
             className="border-none focus:ring-0 w-[100%] bg-transparent pl-0"
+            onChange={handleInput}
+            onKeyDown={handleEnter}
           />
           <span className="flex items-center">
-            <Image
-              src={Menu}
-              width={1000}
-              height={1000}
-              alt="menu"
-              className="w-[20px] h-[20px]"
-            />
+            <label htmlFor="description">
+              <Image
+                src={Menu}
+                width={1000}
+                height={1000}
+                alt="menu"
+                className="w-[20px] h-[20px]"
+              />
+            </label>
             <input
               type="text"
               name="description"
               id="description"
               placeholder="Deskripsi Tugas (Optional)"
               className="border-none focus:ring-0 text-[14px] w-[100%] bg-transparent"
+              onChange={handleInput}
+              onKeyDown={handleEnter}
             />
           </span>
           <span className="flex items-center">
-            <Image
-              src={Calender}
-              width={1000}
-              height={1000}
-              alt="calender"
-              className="w-[20px] h-[20px]"
-            />
+            <label htmlFor="created_at">
+              <Image
+                src={Calender}
+                width={1000}
+                height={1000}
+                alt="calender"
+                className="w-[20px] h-[20px]"
+              />
+            </label>
             <input
-              type="text"
-              name="date"
-              id="date"
+              type="datetime-local"
+              name="created_at"
+              id="created_at"
               placeholder="Tanggal & Waktu"
-              className="border-none focus:ring-0 text-[14px] w-[100%] bg-transparent"
+              className="focus:ring-0 text-[14px]"
+              onChange={handleInput}
+              onKeyDown={handleEnter}
             />
           </span>
         </div>
@@ -68,8 +139,16 @@ const InputProfile: React.FC<{
   onSetValue?: any;
   onId?: string;
   onHtmlFor?: string;
-  onDisable: boolean
-}> = ({ onType, onTitle, onId, onHtmlFor, setOnChange, onSetValue, onDisable }) => {
+  onDisable: boolean;
+}> = ({
+  onType,
+  onTitle,
+  onId,
+  onHtmlFor,
+  setOnChange,
+  onSetValue,
+  onDisable,
+}) => {
   return (
     <>
       <input

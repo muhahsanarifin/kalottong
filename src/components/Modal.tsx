@@ -1,17 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import { getCookie, deleteCookie } from "cookies-next";
-import { Button, Modal, Label, Checkbox } from "flowbite-react";
-import { AuthModalProps } from "@/utils/types/modalType";
-import Link from "next/link";
-import { login } from "@/utils/api/auth";
-import { SpinnerLoader, ErrorMessage } from "./Feed";
 import { setCookie } from "cookies-next";
+import Link from "next/link";
+import Image from "next/image";
+import { Icon } from "@iconify/react";
+
+import { login } from "@/utils/api/auth";
+import { AuthModalProps } from "@/utils/types/modalType";
 import {
   setItemLocalStorage,
   getItemLocalStorage,
   removeItemLocalStorage,
 } from "@/utils/storage/localStorage";
 import { logout } from "@/utils/api/auth";
+
+import { Button, Modal, Label, Checkbox } from "flowbite-react";
+import { SpinnerLoader, ErrorMessage } from "./Feed";
+import EditIcon from "../assets/icons/edit.png";
+import DeleteIcon from "../assets/icons/delete.png";
 
 export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
   const [errorResponse, setErrorResponse] = useState<any>("");
@@ -108,7 +114,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
                 name="email"
                 id="email"
                 type="email"
-                placeholder="name@company.com"
+                placeholder="name@kalottong.com"
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 ${
                   errorResponse === "Email is not registered" &&
                   "border-red-500 bg-red-50 text-red-900 placeholder-red-700 focus:ring-red-500 focus:border-red-500"
@@ -275,6 +281,67 @@ export const LogoutModal: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
             </div>
           </div>
         </div>
+      </div>
+    </>
+  );
+};
+
+export const OptionTaskModal: React.FC<{
+  onShow: boolean;
+  onSetClose?: any;
+  onFocus: any;
+}> = ({ onShow, onSetClose, onFocus }) => {
+  const HandleDeleteTask = () => {
+    console.log("Delete task test");
+  };
+
+  const HandleRenameTask = () => {
+    console.log("Rename task test");
+  };
+
+  return (
+    <>
+      <div
+        className={
+          onFocus || !onShow
+            ? "hidden"
+            : "flex flex-col gap-y-2 absolute right-2 top-8 bg-[#FFFFFF] z-40 p-[18px] border-[1px] border-solid border-[#CCCED2] rounded-[8px]"
+        }
+      >
+        <button
+          className="absolute top-1 right-1 z-40"
+          onClick={onSetClose}
+        >
+          <Icon icon="material-symbols:close" />
+        </button>
+        <span className="text-[12px] flex items-center gap-x-1 cursor-pointer">
+          <label htmlFor="edit">
+            <Image
+              src={EditIcon}
+              alt="Edit icon"
+              width={500}
+              height={500}
+              className="w-[12px] h-[12px]"
+            />
+          </label>
+          <button id="edit" onClick={HandleRenameTask}>
+            Rename task
+          </button>
+        </span>
+        <span className="text-[12px] flex items-center gap-x-1 cursor-pointer">
+          <label htmlFor="delete">
+            <Image
+              src={DeleteIcon}
+              alt="Delete icon"
+              width={500}
+              height={500}
+              className="w-[12px] h-[12px]"
+            />
+          </label>
+          <button id="delete" onClick={HandleDeleteTask}>
+            Delete task
+          </button>
+        </span>
       </div>
     </>
   );

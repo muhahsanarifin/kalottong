@@ -16,6 +16,34 @@ export const SpinnerLoader: React.FC<{ onClassName: string }> = ({
   );
 };
 
+export const TaskSkeletonLoader: React.FC<{ onTasks?: any }> = ({
+  onTasks,
+}) => {
+  return (
+    <>
+      {onTasks.fill(0).map((_: any, idx: any) => (
+        <>
+          <li className="flex flex-col gap-y-4">
+            <div className="flex animate-pulse">
+              <div>
+                <div className="rounded-[100%] w-[1.75rem] h-[1.75rem] bg-cyan-blue-light"></div>
+              </div>
+              <div className="mx-4 flex flex-col gap-y-2">
+                <div className="flex gap-x-2 items-center w-[10rem]">
+                  <div className="h-2 bg-cyan-blue-light rounded w-[100%]"></div>
+                  <div className="h-2 bg-cyan-blue-light rounded w-[50%]"></div>
+                </div>
+                <div className="h-2 bg-cyan-blue-light rounded"></div>
+              </div>
+              <div className="h-3 bg-cyan-blue-light rounded w-3 ml-auto"></div>
+            </div>
+          </li>
+        </>
+      ))}
+    </>
+  );
+};
+
 export const ErrorMessage: React.FC<any> = ({ msg }) => {
   return (
     <>
@@ -27,57 +55,28 @@ export const ErrorMessage: React.FC<any> = ({ msg }) => {
 };
 
 export const WelcomeMessage: React.FC = () => {
-  const [hidden, setHidden] = useState<any>();
-  const sample = (e: any) => {
+  const [hidden, setHidden] = useState<any>(
+    getItemLocalStorage("hidden-benner")
+  );
+  const handleGetStarted = (e: any) => {
+    // console.log("Element:", e);
     // console.log(e.target.classList);
 
     setItemLocalStorage("hidden-benner", "hidden");
     window.location.replace("/auth/register");
   };
 
-  useEffect(() => {
-    setHidden(getItemLocalStorage("hidden-benner"));
-  }, []);
-
   return (
     <>
-      <div className="mx-auto max-w-screen-xl px-4 py-32 lg:flex lg:h-screen lg:items-center">
-        <div className="mx-auto max-w-xl text-center">
-          {!hidden ? (
-            <>
-              <h1 className="text-3xl font-extrabold sm:text-5xl">
-                Welcome to Kalot
-                <strong className="font-extrabold text-red-orange sm:block">
-                  tong.
-                </strong>
-              </h1>
-              <p className="mt-4 sm:text-xl sm:leading-relaxed">
-                Create task easy with <span className="font-medium">kalo</span>
-                <span className="font-medium text-red-orange">ttong</span> .
-              </p>
-
-              <div className="mt-8 flex flex-wrap justify-center gap-4">
-                <button
-                  className="block w-full rounded bg-red-orange px-12 py-3 text-sm font-medium text-white shadow hover:bg-[#f3551c] focus:outline-none focus:ring focus:ring-[#ffb291] active:bg-red-orange sm:w-auto"
-                  onClick={sample}
-                >
-                  Get Started
-                </button>
-
-                {/* <button
-                  className="block w-full rounded px-12 py-3 text-sm font-medium text-red-orange shadow hover:text-red-orange focus:outline-none focus:ring active:text-red-orange sm:w-auto"
-                >
-                  Learn More
-                </button> */}
-              </div>
-            </>
-          ) : (
+      <div className="flex h-[100vh]">
+        <div className="m-auto text-center">
+          {hidden && (
             <div className="grid h-full px-4 bg-white">
               <div className="text-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 1024 768"
-                  className="w-auto h-56 mx-auto text-black sm:h-64"
+                  className="motion-safe:animate-bounce w-auto h-56 mx-auto text-black sm:h-64"
                 >
                   <g fill="none" fillRule="evenodd">
                     <g fill="#FF5678">
@@ -103,6 +102,37 @@ export const WelcomeMessage: React.FC = () => {
               </div>
             </div>
           )}
+
+          {!hidden && (
+            <div className={hidden && `${hidden}`}>
+              <h1 className="text-4xl font-extrabold sm:text-5xl">
+                Welcome to Kalot
+                <strong className="font-extrabold text-red-orange sm:block">
+                  tong.
+                </strong>
+              </h1>
+              <p className="mt-4 sm:text-xl sm:leading-relaxed">
+                Create task easily with{" "}
+                <span className="font-medium">kalo</span>
+                <span className="font-medium text-red-orange">ttong</span> .
+              </p>
+
+              <div className="mt-8 flex flex-wrap justify-center gap-4">
+                <button
+                  className="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 block w-full rounded bg-red-orange px-12 py-3 text-sm font-medium text-white shadow hover:bg-[#f3551c] focus:outline-none focus:ring focus:ring-[#ffb291] active:bg-red-orange sm:w-auto"
+                  onClick={handleGetStarted}
+                >
+                  Get Started
+                </button>
+
+                {/* <button
+                  className="block w-full rounded px-12 py-3 text-sm font-medium text-red-orange shadow hover:text-red-orange focus:outline-none focus:ring active:text-red-orange sm:w-auto"
+                >
+                  Learn More
+                </button> */}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>
@@ -112,9 +142,17 @@ export const WelcomeMessage: React.FC = () => {
 export const SuccessMessage: React.FC<{ init: string }> = ({ init }) => {
   return (
     <>
-      <Alert color="success" className="w-[100%] h-[47.6px] flex justify-center">
+      <Alert
+        color="success"
+        className="w-[100%] h-[47.6px] flex justify-center"
+      >
         <span className="text-medium flex items-center gap-x-2">
-          <Icon icon="mdi:success-circle-outline" color="#03543f" width="24px" height="24px" />
+          <Icon
+            icon="mdi:success-circle-outline"
+            color="#03543f"
+            width="24px"
+            height="24px"
+          />
           <span className="text-medium">{init}</span>
         </span>
       </Alert>

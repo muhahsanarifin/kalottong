@@ -20,7 +20,7 @@ import {
 } from "@/utils/types/buttonType";
 import Link from "next/link";
 import { Button } from "flowbite-react";
-import {SpinnerLoader} from "@/components/Feed"
+import { SpinnerLoader } from "@/components/Feed";
 
 const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
   onSetToggle,
@@ -28,7 +28,7 @@ const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
   return (
     <>
       <button
-        className="flex bg-red-orange py-[12px] px-[15px] gap-x-2 rounded-[60px]"
+        className="flex bg-red-orange py-[12px] px-[15px] gap-x-2 rounded-[60px] hover:bg-red-orange-dark"
         onClick={onSetToggle}
       >
         <Image
@@ -51,11 +51,9 @@ const SortingButton: React.FC<SortingButtonProps> = ({
   return (
     <>
       <button
-        className={
-          onHidden
-            ? "flex gap-x-2 items-center py-[10px] px-[14px] rounded-[50px] border-[#CCCED2] border-solid border-2"
-            : "flex gap-x-2 items-center py-[10px] px-[14px] rounded-[50px] border-red-orange border-solid border-2"
-        }
+        className={`flex gap-x-2 items-center py-[10px] px-[14px] rounded-[50px]  border-solid border-2 ${
+          onHidden ? "border-[#CCCED2]" : "border-red-orange"
+        }`}
         onClick={onSetToggle}
       >
         <p
@@ -133,10 +131,11 @@ const DeleteSubTaskButton: React.FC = () => {
   );
 };
 
-const MoreButton: React.FC = () => {
+const MoreButton: React.FC<{onSetShow: any}> = ({onSetShow}) => {
+
   return (
     <>
-      <button>
+      <button onClick={onSetShow}>
         <Image
           src={MoreIcon}
           alt="more"
@@ -233,7 +232,7 @@ const SaveInputProfileButton: React.FC<SaveInputProfileButtonProps> = ({
 const SaveImageProfileButton: React.FC<SaveImageProfileButtonProps> = ({
   onSetAction,
   onDisable,
-  onLoading
+  onLoading,
 }) => {
   return (
     <>
