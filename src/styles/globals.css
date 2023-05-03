@@ -11,3 +11,20 @@
     @apply py-5 px-20 xs:p-0;
   }
 }
+
+/* Input date */
+[type="datetime-local"] {
+  /* background: transparent url(../assets//icons/calendar.png) 97% 50% no-repeat;
+  background-size: 14px; */
+  background: transparent;
+  color: #7A7F83;
+  border: none;
+}
+
+[type="datetime-local"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
