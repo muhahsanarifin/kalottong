@@ -14,3 +14,13 @@ export type SubtasksState = {
 export type ArgProfileThunk = {
   [key: string]: any;
 };
+
+// Tasks
+export type ArgTasksThunk = {
+  [key: string]: any;
+};
+
+// Subtasks
+export type ArgSubTasksThunk = {
+  [key: string]: any;
+};

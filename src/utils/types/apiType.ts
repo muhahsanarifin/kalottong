@@ -3,7 +3,7 @@ export type BodyArg = {
 };
 
 export type ParamsArg = {
-  params: string | number;
+  params?: string | number;
 };
 
 export type IdTasksArg = {
