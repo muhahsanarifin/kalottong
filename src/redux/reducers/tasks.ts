@@ -1,76 +1,207 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { TasksState } from "@/utils/types/reduxType";
+import { TasksState, ArgTasksThunk } from "@/utils/types/reduxType";
 import {
-  retriveTasks,
+  retriveOngoingTasks,
+  retriveDoneTasks,
   createTasks,
   editTasks,
+  editStatusTasks,
   deleteTasks,
 } from "@/utils/api/tasks";
+import { getCookie } from "cookies-next";
 
 const initialState: TasksState = {
-  retriveTasks: [],
-  createTasks: [],
-  editTasks: [],
-  deleteTasks: [],
-  isLoading: false,
-  isFulfilled: false,
-  isRejected: false,
-  err: null,
+  retriveOngoingTasks: {
+    isLoading: false,
+    isFulfilled: false,
+    isRejected: false,
+    data: {
+      totalData: null,
+      next: null,
+      previous: null,
+      totalPages: null,
+      data: null,
+      msg: null,
+    },
+    err: null,
+  },
+  retriveDoneTasks: {
+    isLoading: false,
+    isFulfilled: false,
+    isRejected: false,
+    data: {
+      totalData: null,
+      next: null,
+      previous: null,
+      totalPages: null,
+      data: null,
+      msg: null,
+    },
+    err: null,
+  },
+  createTasks: {
+    isLoading: false,
+    isFulfilled: false,
+    isRejected: false,
+    data: null,
+    err: null,
+  },
+  editTasks: {
+    isLoading: false,
+    isFulfilled: false,
+    isRejected: false,
+    data: null,
+    err: null,
+  },
+  editStatusTasks: {
+    isLoading: false,
+    isFulfilled: false,
+    isRejected: false,
+    data: null,
+    err: null,
+  },
+  deleteTasks: {
+    isLoading: false,
+    isFulfilled: false,
+    isRejected: false,
+    data: null,
+    err: null,
+  },
 };
 
-const retriveTasksThunk = createAsyncThunk(
-  "tasks",
-  async (accessToken: any, params: any) => {
+const retriveOngoingTasksThunk = createAsyncThunk(
+  "tasks/ongoing",
+  async ({ params, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
     try {
-      const response = await retriveTasks(accessToken, params);
-      // console.log("Response retrive data taks:", response);
+      typeof cbPending === "function" && cbPending();
+      const response = await retriveOngoingTasks(getCookie("token"), params);
+      typeof cbFulfilled === "function" && cbFulfilled();
       return response.data;
-    } catch (error) {
-      console.error(error);
-      return error;
+    } catch (error: any) {
+      if (error.response) {
+        console.error(error.response.data?.msg);
+        throw error.response.data?.msg;
+      } else {
+        console.log(error);
+        throw error;
+      }
+    } finally {
+      typeof cbFinally === "function" && cbFinally();
+    }
+  }
+);
+
+const retriveDoneTasksThunk = createAsyncThunk(
+  "tasks/done",
+  async ({ params, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
+    try {
+      typeof cbPending === "function" && cbPending();
+      const response = await retriveDoneTasks(getCookie("token"), params);
+      // console.log("Response retrive data donetaks:", response);
+      typeof cbFulfilled === "function" && cbFulfilled();
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        console.error(error.response.data?.msg);
+        throw error.response.data?.msg;
+      } else {
+        console.log(error);
+        throw error;
+      }
+    } finally {
+      typeof cbFinally === "function" && cbFinally();
     }
   }
 );
 
 const createTasksThunk = createAsyncThunk(
   "tasks/create",
-  async (accessToken: any, body: any) => {
+  async ({ body, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
     try {
-      const response = await createTasks(accessToken, body);
+      typeof cbPending === "function" && cbPending();
+      const response = await createTasks(getCookie("token"), body);
       // console.log("Response create taks:", response);
+      typeof cbFulfilled === "function" && cbFulfilled();
       return response.data;
-    } catch (error) {
-      console.error(error);
-      return error;
+    } catch (error: any) {
+      if (error.response) {
+        console.log(error.response.data?.msg);
+        throw error.response.data?.msg;
+      } else {
+        console.error(error);
+        throw error;
+      }
+    } finally {
+      typeof cbFinally === "function" && cbFinally();
     }
   }
 );
 
 const editTasksThunk = createAsyncThunk(
   "tasks/edit",
-  async (accessToken: any, body: any, id?: any) => {
+  async ({ body, id, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
     try {
-      const response = await editTasks(accessToken, body, id);
+      typeof cbPending === "function" && cbPending();
+      const response = await editTasks(getCookie("token"), body, id);
       // console.log("Response edit task:", response.data);
+      typeof cbFulfilled === "function" && cbFulfilled();
       return response.data;
-    } catch (error) {
-      console.error(error);
-      return error;
+    } catch (error: any) {
+      if (error.response) {
+        console.log(error.response.data?.msg);
+        throw error.response.data?.msg;
+      } else {
+        console.error(error);
+        throw error;
+      }
+    } finally {
+      typeof cbFinally === "function" && cbFinally();
+    }
+  }
+);
+
+const editStatusTasksThunk = createAsyncThunk(
+  "tasks/status/edit",
+  async ({ body, id, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
+    try {
+      typeof cbPending === "function" && cbPending();
+      const response = await editStatusTasks(getCookie("token"), body, id);
+      // console.log("Response edit task:", response.data);
+      typeof cbFulfilled === "function" && cbFulfilled();
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        console.log(error.response.data?.msg);
+        throw error.response.data?.msg;
+      } else {
+        console.error(error);
+        throw error;
+      }
+    } finally {
+      typeof cbFinally === "function" && cbFinally();
     }
   }
 );
 
 const deleteTasksThunk = createAsyncThunk(
   "tasks/delete",
-  async (accessToken: any, id?: any) => {
+  async ({ id, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
     try {
-      const response = await deleteTasks(accessToken, id);
+      typeof cbPending === "function" && cbPending();
+      const response = await deleteTasks(getCookie("token"), id);
       // console.log("Response delete task:", response.data);
+      typeof cbFulfilled === "function" && cbFulfilled();
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response) {
+        console.error(error.response.data?.msg);
+        throw error.response.data?.msg;
+      }
       console.error(error);
-      return error;
+      throw error;
+    } finally {
+      typeof cbFinally === "function" && cbFinally();
     }
   }
 );
@@ -79,55 +210,125 @@ const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    reset: (prevState) => {
-      return {
-        ...prevState,
-        retriveTasks: [],
-        createTasks: [],
-        editTasks: [],
-        deleteTasks: [],
-      };
-    },
+    // reset: (prevState) => {
+    //   return {
+    //     ...prevState,
+    //     retriveOngoingTasks: null,
+    //     retriveDoneTasks: null,
+    //     createTasks: null,
+    //     editTasks: null,
+    //     editStatusTask: null,
+    //     deleteTasks: null,
+    //   };
+    // },
   },
   extraReducers: (builder) => {
-    builder.addCase(retriveTasksThunk.pending, (prevState) => {
+    builder.addCase(retriveOngoingTasksThunk.pending, (prevState) => {
       return {
         ...prevState,
-        isLoading: true,
-        isFulfilled: false,
-        isRejected: false,
+        retriveOngoingTasks: {
+          isLoading: true,
+          isFulfilled: false,
+          isRejected: false,
+          data: {
+            totalData: null,
+            next: null,
+            previous: null,
+            totalPages: null,
+            data: null,
+            msg: null,
+          },
+          err: null,
+        },
       };
     });
     builder.addCase(
-      retriveTasksThunk.fulfilled,
+      retriveOngoingTasksThunk.fulfilled,
       (prevState, action: PayloadAction<any>) => {
         return {
           ...prevState,
-          isLoading: true,
-          isFulfilled: true,
-          isRejected: false,
-          retriveTasks: action.payload,
+          retriveOngoingTasks: {
+            isLoading: false,
+            isFulfilled: true,
+            isRejected: false,
+            data: action.payload,
+            err: null,
+          },
         };
       }
     );
-    builder.addCase(
-      retriveTasksThunk.rejected,
-      (prevState, action: PayloadAction<any>) => {
-        return {
-          ...prevState,
+    builder.addCase(retriveOngoingTasksThunk.rejected, (prevState, action) => {
+      return {
+        ...prevState,
+        retriveOngoingTasks: {
           isLoading: false,
           isFulfilled: false,
           isRejected: true,
-          err: action.payload,
+          data: {
+            msg: action.error.message,
+          },
+          err: action.error.message,
+        },
+      };
+    });
+    builder.addCase(retriveDoneTasksThunk.pending, (prevState) => {
+      return {
+        ...prevState,
+        retriveDoneTasks: {
+          isLoading: true,
+          isFulfilled: false,
+          isRejected: false,
+          data: {
+            totalData: null,
+            next: null,
+            previous: null,
+            totalPages: null,
+            data: null,
+            msg: null,
+          },
+          err: null,
+        },
+      };
+    });
+    builder.addCase(
+      retriveDoneTasksThunk.fulfilled,
+      (prevState, action: PayloadAction<any>) => {
+        return {
+          ...prevState,
+          retriveDoneTasks: {
+            isLoading: false,
+            isFulfilled: true,
+            isRejected: false,
+            data: action.payload,
+            err: null,
+          },
         };
       }
     );
+    builder.addCase(retriveDoneTasksThunk.rejected, (prevState, action) => {
+      return {
+        ...prevState,
+        retriveDoneTasks: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: true,
+          data: {
+            msg: action.error.message,
+          },
+          err: action.error.message,
+        },
+      };
+    });
     builder.addCase(createTasksThunk.pending, (prevState) => {
       return {
         ...prevState,
-        isLoading: true,
-        isFulfilled: false,
-        isRejected: false,
+        createTasks: {
+          isLoading: true,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
       };
     });
     builder.addCase(
@@ -135,31 +336,38 @@ const tasksSlice = createSlice({
       (prevState, action: PayloadAction<any>) => {
         return {
           ...prevState,
-          isLoading: true,
-          isFulfilled: true,
-          isRejected: false,
-          createTasks: action.payload,
+          createTasks: {
+            isLoading: false,
+            isFulfilled: true,
+            isRejected: false,
+            data: action.payload,
+            err: null,
+          },
         };
       }
     );
-    builder.addCase(
-      createTasksThunk.rejected,
-      (prevState, action: PayloadAction<any>) => {
-        return {
-          ...prevState,
+    builder.addCase(createTasksThunk.rejected, (prevState, action) => {
+      return {
+        ...prevState,
+        createTasks: {
           isLoading: false,
           isFulfilled: false,
           isRejected: true,
-          err: action.payload,
-        };
-      }
-    );
+          data: { msg: action.error.message },
+          err: action.error.message,
+        },
+      };
+    });
     builder.addCase(editTasksThunk.pending, (prevState) => {
       return {
         ...prevState,
-        isLoading: true,
-        isFulfilled: false,
-        isRejected: false,
+        editTasks: {
+          isLoading: true,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
       };
     });
     builder.addCase(
@@ -167,31 +375,67 @@ const tasksSlice = createSlice({
       (prevState, action: PayloadAction<any>) => {
         return {
           ...prevState,
-          isLoading: true,
+          isLoading: false,
           isFulfilled: true,
           isRejected: false,
           editTasks: action.payload,
         };
       }
     );
+    builder.addCase(editTasksThunk.rejected, (prevState, action) => {
+      return {
+        ...prevState,
+        isLoading: false,
+        isFulfilled: false,
+        isRejected: true,
+        editTasks: { msg: action.error.message },
+        err: action.error.message,
+      };
+    });
+    builder.addCase(editStatusTasksThunk.pending, (prevState) => {
+      return {
+        ...prevState,
+        editStatusTasks: {
+          isLoading: true,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    });
     builder.addCase(
-      editTasksThunk.rejected,
+      editStatusTasksThunk.fulfilled,
       (prevState, action: PayloadAction<any>) => {
         return {
           ...prevState,
           isLoading: false,
-          isFulfilled: false,
-          isRejected: true,
-          err: action.payload,
+          isFulfilled: true,
+          isRejected: false,
+          editStatusTasks: action.payload,
         };
       }
     );
+    builder.addCase(editStatusTasksThunk.rejected, (prevState, action) => {
+      return {
+        ...prevState,
+        isLoading: false,
+        isFulfilled: false,
+        isRejected: true,
+        editStatusTasks: { msg: action.error.message },
+        err: action.error.message,
+      };
+    });
     builder.addCase(deleteTasksThunk.pending, (prevState) => {
       return {
         ...prevState,
-        isLoading: true,
-        isFulfilled: false,
-        isRejected: false,
+        deleteTasks: {
+          isLoading: true,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
       };
     });
     builder.addCase(
@@ -199,33 +443,38 @@ const tasksSlice = createSlice({
       (prevState, action: PayloadAction<any>) => {
         return {
           ...prevState,
-          isLoading: true,
-          isFulfilled: true,
-          isRejected: false,
-          deleteTasks: action.payload,
+          deleteTasks: {
+            isLoading: false,
+            isFulfilled: true,
+            isRejected: false,
+            data: action.payload,
+            err: null,
+          },
         };
       }
     );
-    builder.addCase(
-      deleteTasksThunk.rejected,
-      (prevState, action: PayloadAction<any>) => {
-        return {
-          ...prevState,
+    builder.addCase(deleteTasksThunk.rejected, (prevState, action) => {
+      return {
+        ...prevState,
+        deleteTasks: {
           isLoading: false,
           isFulfilled: false,
-          isRejected: true,
-          err: action.payload,
-        };
-      }
-    );
+          isRejected: false,
+          data: { msg: action.error.message },
+          err: action.error.message,
+        },
+      };
+    });
   },
 });
 
 export const taskAction = {
   ...tasksSlice.actions,
-  retriveTasksThunk,
-  createAsyncThunk,
+  retriveOngoingTasksThunk,
+  retriveDoneTasksThunk,
+  createTasksThunk,
   editTasksThunk,
+  editStatusTasksThunk,
   deleteTasksThunk,
 };
 
