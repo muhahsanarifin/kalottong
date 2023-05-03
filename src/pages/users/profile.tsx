@@ -68,7 +68,6 @@ const Profile: NextPageWithLayout = () => {
     };
 
     const cbFinally = () => {
-      console.log("Finally");
       window.location.reload();
     };
 
@@ -141,10 +140,13 @@ const Profile: NextPageWithLayout = () => {
       setLoadingUpdateImage(true);
     };
 
-    const cbFulfilled = (response: any) => {};
+    const cbFulfilled = (response: any) => {
+      console.info(response.msg);
+    };
 
     const cbFinally = () => {
       window.location.reload();
+      setLoadingUpdateImage(false)
     };
 
     if (image) {
@@ -183,11 +185,12 @@ const Profile: NextPageWithLayout = () => {
                 src={
                   previewImage
                     ? previewImage
-                    : `${process.env.NEXT_PUBLIC_IMAGE_CLOUDNIARY}${profile?.image}`
+                    : `${process.env.NEXT_PUBLIC_IMAGE_CLOUDNIARY}/${profile?.image}`
                 }
                 className="absolute inset-0 h-full w-full object-cover opacity-75 transition-opacity group-hover:opacity-50"
                 width={500}
                 height={500}
+                priority
               />
             ) : (
               <Icon
