@@ -47,7 +47,7 @@ export const confirmSlice = createSlice({
         taskDataToRename: { data: action.payload, isFulfilled: true },
       };
     },
-    resetDateToRename: (prevState) => {
+    resetDataToRename: (prevState) => {
       return {
         ...prevState,
         taskDataToRename: { data: null, isFulfilled: false },

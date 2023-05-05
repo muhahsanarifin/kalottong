@@ -106,7 +106,7 @@ const retriveDoneTasksThunk = createAsyncThunk(
         console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
-        console.log(error);
+        console.error(error);
         throw error;
       }
     } finally {
@@ -126,7 +126,7 @@ const createTasksThunk = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       if (error.response) {
-        console.log(error.response.data?.msg);
+        console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
         console.error(error);
@@ -149,7 +149,7 @@ const editTasksThunk = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       if (error.response) {
-        console.log(error.response.data?.msg);
+        console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
         console.error(error);
@@ -172,7 +172,7 @@ const editStatusTasksThunk = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       if (error.response) {
-        console.log(error.response.data?.msg);
+        console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
         console.error(error);
