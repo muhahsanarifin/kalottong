@@ -83,7 +83,7 @@ const retriveOngoingTasksThunk = createAsyncThunk(
         console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
-        console.log(error);
+        console.error(error);
         throw error;
       }
     } finally {
@@ -459,7 +459,7 @@ const tasksSlice = createSlice({
         deleteTasks: {
           isLoading: false,
           isFulfilled: false,
-          isRejected: false,
+          isRejected: true,
           data: { msg: action.error.message },
           err: action.error.message,
         },
