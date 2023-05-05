@@ -1,5 +1,4 @@
 import Axios from "axios";
-
 import { BodyArg } from "../types/apiType";
 
 const BASE_URL = process.env.NEXT_PUBLIC_KALOTTONG_BACK_END;

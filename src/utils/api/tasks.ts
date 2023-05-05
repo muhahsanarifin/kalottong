@@ -1,7 +1,5 @@
 import Axios from "axios";
-
 import { BodyArg, ParamsArg, IdTasksArg } from "../types/apiType";
-import { access } from "fs";
 
 const BASE_URL = process.env.NEXT_PUBLIC_KALOTTONG_BACK_END;
 
