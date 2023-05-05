@@ -4,8 +4,8 @@ import { setCookie } from "cookies-next";
 import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 
 import { login } from "@/utils/api/auth";
 import { AuthModalProps } from "@/utils/types/modalType";
@@ -268,7 +268,7 @@ export const LogoutModal: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
                     disabled={loading && true}
                   >
                     {loading ? (
-                      <SpinnerLoader onClassName={"ring-blue-400"} />
+                      <SpinnerLoader onClassName={"fill-red-orange"} />
                     ) : (
                       "Sign out"
                     )}
@@ -299,7 +299,9 @@ export const OptionTaskModal: React.FC<{
 }> = ({ onShow, onSetClose, onFocus, onIdTask, onGoingTaskData }) => {
   const useAppDispatch: () => AppDispatch = useDispatch;
   const dispatch = useAppDispatch();
-
+  const dataToRename = useSelector(
+    (state: RootState) => state.confirm.taskDataToRename
+  );
   const handleDeleteTask = (e: any, IdTask: any) => {
     if (Number(e.target.id) === IdTask) {
       const id = IdTask;
@@ -326,15 +328,16 @@ export const OptionTaskModal: React.FC<{
   const handleRenameTask = (e: any, IdTask: any) => {
     // if (Number(e.target.id) === IdTask) return console.log(onGoingTaskData);
     const body = onGoingTaskData;
-    if (Number(e.target.id) === IdTask)
+    if (Number(e.target.id) === IdTask) {
       return dispatch(confirmAction.addDataToRename(body));
+    }
   };
 
   return (
     <>
       <div
         className={
-          onFocus || !onShow
+          onFocus || !onShow || dataToRename?.isFulfilled
             ? "hidden"
             : "flex flex-col gap-y-2 absolute right-2 top-8 bg-[#FFFFFF] z-40 p-[18px] border-[1px] border-solid border-[#CCCED2] rounded-[8px]"
         }
@@ -355,7 +358,12 @@ export const OptionTaskModal: React.FC<{
               className="w-[12px] h-[12px]"
             />
           </label>
-          <button id={onIdTask} onClick={(e) => handleRenameTask(e, onIdTask)}>
+          <button
+            id={onIdTask}
+            onClick={(e) => {
+              handleRenameTask(e, onIdTask);
+            }}
+          >
             Rename task
           </button>
         </span>

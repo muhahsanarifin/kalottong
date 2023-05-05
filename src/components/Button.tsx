@@ -24,7 +24,7 @@ import { SpinnerLoader } from "@/components/Feed";
 
 const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
   onSetToggle,
-  init
+  init,
 }) => {
   return (
     <>
@@ -36,8 +36,8 @@ const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
           <>
             <Image
               src={AddTaskIcon}
-              width={1000}
-              height={1000}
+              width={500}
+              height={500}
               alt={init}
               className="w-[1.5rem] h-[1.5rem]"
             />
@@ -78,8 +78,8 @@ const SortingButton: React.FC<SortingButtonProps> = ({
         <Image
           src={onHidden ? ArrowUpGray : ArrowDownOrange}
           alt="Sort"
-          width={1000}
-          height={1000}
+          width={500}
+          height={500}
           className="w-[12px] h-[10px]"
         />
       </button>
@@ -99,8 +99,8 @@ const TaskDropDownButton: React.FC<TaskDropDownButtonProps> = ({
         <Image
           src={onFocus || onHidden ? ArrowDown : ArrowUpGray}
           alt="Task dropdown button"
-          width={1000}
-          height={1000}
+          width={500}
+          height={500}
           className="w-[12px] h-[10px]"
         />
       </button>
@@ -116,8 +116,8 @@ const AddSubTaskButton: React.FC = () => {
           src={AddSubTaskIcon}
           alt="Add subtask"
           className="w-[22px] h-[22px]"
-          width={1000}
-          height={1000}
+          width={500}
+          height={500}
         />
         <p>Tambah</p>
       </button>
@@ -132,8 +132,8 @@ const DeleteSubTaskButton: React.FC = () => {
         <Image
           src={TrashIcon}
           alt="Delete subtask"
-          width={1000}
-          height={1000}
+          width={500}
+          height={500}
           className="w-[18px] h-[18px]"
         />
       </button>
@@ -151,8 +151,8 @@ const MoreButton: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
         <Image
           src={MoreIcon}
           alt="more"
-          width={1000}
-          height={1000}
+          width={500}
+          height={500}
           className="w-[24px] h-[24px]"
         />
       </button>
@@ -170,8 +170,8 @@ const DoneTaskButton: React.FC<DoneTaskButtonProps> = ({
         <Image
           src={!onHidden ? ArrowRight : ArrowUpGray}
           alt="Right arrow"
-          width={1000}
-          height={1000}
+          width={500}
+          height={500}
           className={"w-[12px] h-[10px]"}
         />
       </button>
@@ -279,5 +279,5 @@ export {
   RegulerButton,
   SaveInputProfileButton,
   SaveImageProfileButton,
-  AddTaskButton as RenameButton
+  AddTaskButton as RenameButton,
 };

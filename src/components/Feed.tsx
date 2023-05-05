@@ -44,6 +44,17 @@ export const TaskSkeletonLoader: React.FC<{ onTasks?: any }> = ({
   );
 };
 
+export const HeaderProfileSkeletonLoader: React.FC<{}> = () => {
+  return (
+    <>
+      <div className="flex gap-x-2 animate-pulse items-center">
+        <div className="w-[1.5rem] h-[1.5rem] rounded-[100%] bg-cyan-blue-light"></div>
+        <div className="w-[6.5rem] h-[1rem] rounded-md bg-cyan-blue-light"></div>
+      </div>
+    </>
+  );
+}
+
 export const ErrorMessage: React.FC<any> = ({ msg }) => {
   return (
     <>

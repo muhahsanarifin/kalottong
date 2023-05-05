@@ -73,8 +73,6 @@ const InputTask: React.FC<{ onBody?: any; isFulfilled?: boolean }> = ({
     }
   };
 
-  console.log(onBody);
-
   // Section Rename Task
   const [inputRenameTask, setInputRenameTask] = useState({
     title: "",
@@ -121,8 +119,8 @@ const InputTask: React.FC<{ onBody?: any; isFulfilled?: boolean }> = ({
 
           window.location.reload();
 
-          // Refresh "resetDateToRename" to initial state
-          dispatch(confirmAction.resetDateToRename());
+          // Refresh "resetDataToRename" to initial state
+          dispatch(confirmAction.resetDataToRename());
         };
 
         const cbFinally = () => {
@@ -145,7 +143,7 @@ const InputTask: React.FC<{ onBody?: any; isFulfilled?: boolean }> = ({
   };
 
   const handleCancelRenameTask = () => {
-    dispatch(confirmAction.resetDateToRename());
+    dispatch(confirmAction.resetDataToRename());
   };
 
   useEffect(() => {
@@ -195,8 +193,8 @@ const InputTask: React.FC<{ onBody?: any; isFulfilled?: boolean }> = ({
               <label htmlFor="description">
                 <Image
                   src={Menu}
-                  width={1000}
-                  height={1000}
+                  width={500}
+                  height={500}
                   alt="menu"
                   className="w-[20px] h-[20px]"
                 />
@@ -218,8 +216,8 @@ const InputTask: React.FC<{ onBody?: any; isFulfilled?: boolean }> = ({
               <label htmlFor="updated_at">
                 <Image
                   src={Calender}
-                  width={1000}
-                  height={1000}
+                  width={500}
+                  height={500}
                   alt="calender"
                   className="w-[20px] h-[20px]"
                 />
@@ -253,8 +251,8 @@ const InputTask: React.FC<{ onBody?: any; isFulfilled?: boolean }> = ({
               <label htmlFor="description">
                 <Image
                   src={Menu}
-                  width={1000}
-                  height={1000}
+                  width={500}
+                  height={500}
                   alt="menu"
                   className="w-[20px] h-[20px]"
                 />
@@ -275,8 +273,8 @@ const InputTask: React.FC<{ onBody?: any; isFulfilled?: boolean }> = ({
               <label htmlFor="created_at">
                 <Image
                   src={Calender}
-                  width={1000}
-                  height={1000}
+                  width={500}
+                  height={500}
                   alt="calender"
                   className="w-[20px] h-[20px]"
                 />

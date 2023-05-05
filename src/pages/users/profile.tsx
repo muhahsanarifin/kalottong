@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import type { NextPageWithLayout } from "../_app";
 import Image from "next/image";
-import { usersAction } from "../../redux/reducers/users";
-import { useSelector, useDispatch } from "react-redux";
 import { Icon } from "@iconify/react";
+import { useSelector, useDispatch } from "react-redux";
+
+import { usersAction } from "../../redux/reducers/users";
 import type { RootState, AppDispatch } from "@/redux/store";
 import { PrivateRoute } from "@/helpers/handleRoutes";
 
@@ -25,6 +26,14 @@ const Profile: NextPageWithLayout = () => {
   const profile = useSelector(
     (state: RootState) => state.user.retriveProfile.data
   );
+
+  const profileFulfilled = useSelector(
+    (state: RootState) => state.user.retriveProfile?.isFulfilled
+  );
+
+  const profileisLoading = useSelector(
+    (state: RootState) => state.user.retriveProfile?.isLoading
+  );
   const [firstname, setFirstName] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [notelp, setNoTelp] = useState<string>("");
@@ -41,10 +50,6 @@ const Profile: NextPageWithLayout = () => {
   const [image, setImage] = useState<File>();
   const [loadingUpdateImage, setLoadingUpdateImage] = useState<boolean>(false);
   const [previewImage, setPreviewImage] = useState<string>("");
-
-  useEffect(() => {
-    dispatch(usersAction.retriveProfileThunk({}));
-  }, [dispatch]);
 
   useEffect(() => {
     setFirstName(profile?.firstname);
@@ -146,7 +151,7 @@ const Profile: NextPageWithLayout = () => {
 
     const cbFinally = () => {
       window.location.reload();
-      setLoadingUpdateImage(false)
+      setLoadingUpdateImage(false);
     };
 
     if (image) {
@@ -169,9 +174,7 @@ const Profile: NextPageWithLayout = () => {
 
   return (
     <>
-      <Header
-        onActive={"bg-gray-100 cursor-not-allowed"}
-      />
+      <Header onActive={"bg-gray-100 cursor-not-allowed"} />
       <section className="flex w-[50%] mx-auto">
         <Breadcrumb page="Profile" />
       </section>
@@ -181,7 +184,12 @@ const Profile: NextPageWithLayout = () => {
             href="#"
             className="group relative block bg-white rounded-lg p-4 shadow-[0_16px_90px_rgba(19,7,52,0.08)] mx-auto w-[50%] h-full"
           >
-            {profile?.image ? (
+            {profileisLoading ? (
+              <Icon
+                icon="material-symbols:person"
+                className="absolute inset-0 h-[100%] w-[100%] object-cover opacity-75 transition-opacity group-hover:opacity-50 text-gray-100 m-auto animate-pulse"
+              />
+            ) : profileFulfilled ? (
               <Image
                 alt="Developer"
                 src={
@@ -192,18 +200,18 @@ const Profile: NextPageWithLayout = () => {
                 className="absolute inset-0 h-full w-full object-cover opacity-75 transition-opacity group-hover:opacity-50"
                 width={500}
                 height={500}
-                priority
+                loading="lazy"
               />
             ) : (
               <Icon
-                icon="material-symbols:frame-person"
+                icon="material-symbols:frame-person-rounded"
                 className="absolute inset-0 h-[50%] w-[50%] object-cover opacity-75 transition-opacity group-hover:opacity-50 text-gray-100 m-auto"
               />
             )}
 
             <div className="relative p-4 sm:p-6 lg:p-8">
               <p className="text-xs font-bold uppercase tracking-widest text-red-orange">
-                accan@gmail.com
+                {profile?.email}
               </p>
               <div className="mt-32 sm:mt-48 lg:mt-64">
                 <div className="translate-y-8 transform opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100">

@@ -2,19 +2,37 @@ import React, { useState, useRef, useEffect, use } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import Image from "next/image";
 import Link from "next/link";
+import { getCookie } from "cookies-next";
+import { useSelector, useDispatch } from "react-redux";
+
+import { usersAction } from "../redux/reducers/users";
+import type { RootState, AppDispatch } from "@/redux/store";
+
+import { AuthModal, LogoutModal } from "./Modal";
+import { HeaderProfileSkeletonLoader } from "./Feed";
+
 import KalottongLogo from "../assets/icons/kalottong.svg";
 import ActiveNotificationIcon from "../assets/icons/active-notification.png";
 import OffNotificationIcon from "../assets/icons/off-notification.png";
-import AvatarIcon from "../assets/icons/avatar.png";
-import { AuthModal, LogoutModal } from "./Modal";
-import { getCookie } from "cookies-next";
 
 const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
+  const useAppDispatch: () => AppDispatch = useDispatch;
+  const dispatch = useAppDispatch();
+  const profile = useSelector(
+    (state: RootState) => state.user.retriveProfile.data
+  );
+  const profileLoading = useSelector(
+    (state: RootState) => state.user.retriveProfile?.isLoading
+  );
   const [hiddenClickOutside, setHiddenClickOutside] = useState<Boolean>(true);
   const [hiddenClickInside, setHiddenClickInside] = useState<Boolean>(true);
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<any>(getCookie("token"));
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  useEffect(() => {
+    dispatch(usersAction.retriveProfileThunk({}));
+  }, [dispatch]);
 
   const handleClickInside = () => {
     setHiddenClickInside(false);
@@ -42,8 +60,8 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
         <section>
           <Image
             src={KalottongLogo}
-            width={1000}
-            height={1000}
+            width={500}
+            height={500}
             alt="kalottong"
             className="w-125"
           />
@@ -63,16 +81,16 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
                 {!true ? (
                   <Image
                     src={ActiveNotificationIcon}
-                    width={1000}
-                    height={1000}
+                    width={500}
+                    height={500}
                     alt="Active Notification"
                     className="w-[1.2rem]"
                   />
                 ) : (
                   <Image
                     src={OffNotificationIcon}
-                    width={1000}
-                    height={1000}
+                    width={500}
+                    height={500}
                     alt="Off Notification"
                     className="w-[1rem]"
                   />
@@ -89,12 +107,21 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
                     }
                     onClick={handleClickInside}
                   >
-                    <Image
-                      src={AvatarIcon}
-                      alt="user photo"
-                      className="w-[2rem] h-[2rem]"
-                    />
-                    {"Accan"}
+                    {profileLoading ? (
+                      <HeaderProfileSkeletonLoader />
+                    ) : (
+                      <>
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_IMAGE_CLOUDNIARY}/${profile?.image}`}
+                          alt="user photo"
+                          className="w-[2rem] h-[2rem] rounded-[100%]"
+                          width={500}
+                          height={500}
+                          loading="lazy"
+                        />
+                        {profile?.lastname}
+                      </>
+                    )}
                     <svg
                       className="w-4 h-4 mx-1.5"
                       aria-hidden="true"
@@ -116,12 +143,14 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
                   className={
                     hiddenClickInside || hiddenClickOutside
                       ? "hidden"
-                      : "border-2 border-solid absolute right-0 bg-white divide-y divide-gray-100 rounded-lg mt-2"
+                      : "border-2 border-solid absolute right-0 bg-white divide-y divide-gray-100 rounded-lg mt-2 z-50"
                   }
                 >
                   <div className="px-4 py-3 text-sm text-gray-900">
-                    <div className="font-medium ">User</div>
-                    <div className="truncate">accan@.com</div>
+                    <div className="font-medium ">
+                      {profile?.firstname} {profile?.lastname}
+                    </div>
+                    <div className="truncate">{profile?.email}</div>
                   </div>
                   <ul className="py-2 text-sm text-gray-700">
                     <li>
