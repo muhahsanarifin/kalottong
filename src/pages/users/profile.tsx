@@ -169,7 +169,9 @@ const Profile: NextPageWithLayout = () => {
 
   return (
     <>
-      <Header />
+      <Header
+        onActive={"bg-gray-100 cursor-not-allowed"}
+      />
       <section className="flex w-[50%] mx-auto">
         <Breadcrumb page="Profile" />
       </section>
