@@ -12,6 +12,7 @@ export type TaskDropDownButtonProps = {
 
 export type AddTaskDropDownButtonProps = {
   onSetToggle?: any;
+  init: string;
 };
 
 export type DoneTaskButtonProps = {

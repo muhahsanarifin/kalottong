@@ -24,3 +24,8 @@ export type ArgTasksThunk = {
 export type ArgSubTasksThunk = {
   [key: string]: any;
 };
+
+// Confirm
+export type ConfirmState = {
+  [key: string]: any;
+};
