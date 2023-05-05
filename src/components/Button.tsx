@@ -24,6 +24,7 @@ import { SpinnerLoader } from "@/components/Feed";
 
 const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
   onSetToggle,
+  init
 }) => {
   return (
     <>
@@ -31,14 +32,23 @@ const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
         className="flex bg-red-orange py-[12px] px-[15px] gap-x-2 rounded-[60px] hover:bg-red-orange-dark"
         onClick={onSetToggle}
       >
-        <Image
-          src={AddTaskIcon}
-          width={1000}
-          height={1000}
-          alt="Add task"
-          className="w-[1.5rem] h-[1.5rem]"
-        />
-        <p className="text-white border-solid">Tambah Tugas</p>
+        {init === "Tambah Tugas" && (
+          <>
+            <Image
+              src={AddTaskIcon}
+              width={1000}
+              height={1000}
+              alt={init}
+              className="w-[1.5rem] h-[1.5rem]"
+            />
+            <p className="text-white border-solid">{init}</p>
+          </>
+        )}
+        {init === "Rename Task" && (
+          <>
+            <p className="text-white border-solid">{init}</p>
+          </>
+        )}
       </button>
     </>
   );
@@ -131,11 +141,13 @@ const DeleteSubTaskButton: React.FC = () => {
   );
 };
 
-const MoreButton: React.FC<{onSetShow: any}> = ({onSetShow}) => {
-
+const MoreButton: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
   return (
     <>
-      <button onClick={onSetShow}>
+      <button
+        onClick={onSetShow}
+        className="hover:bg-[#CCCED2] p-1 rounded-[100%]"
+      >
         <Image
           src={MoreIcon}
           alt="more"
@@ -267,4 +279,5 @@ export {
   RegulerButton,
   SaveInputProfileButton,
   SaveImageProfileButton,
+  AddTaskButton as RenameButton
 };

@@ -112,13 +112,17 @@ const OngoingTasks: React.FC = () => {
                       onSetClose={() =>
                         setshowOptionTaskModal(!showOptionTaskModal)
                       }
+                      onIdTask={task.id}
+                      onGoingTaskData={task}
                     />
                     <span className="flex gap-x-2 items-center ">
                       <label htmlFor={task.id}>
                         <h1>{task.title}</h1>
                       </label>
                       <p className="text-[12px] text-red-orange font-[500] py-[8px] px-[12px] rounded-[50px] bg-[#FFEBD3]">
-                        {formatDate(DateTime.fromISO(task.created_at))}
+                        {task.updated_at
+                          ? formatDate(DateTime.fromISO(task.updated_at))
+                          : formatDate(DateTime.fromISO(task.created_at))}
                       </p>
                       <MoreButton
                         onSetShow={() => {

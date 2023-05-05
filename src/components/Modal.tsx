@@ -4,6 +4,8 @@ import { setCookie } from "cookies-next";
 import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 
 import { login } from "@/utils/api/auth";
 import { AuthModalProps } from "@/utils/types/modalType";
@@ -13,6 +15,8 @@ import {
   removeItemLocalStorage,
 } from "@/utils/storage/localStorage";
 import { logout } from "@/utils/api/auth";
+import { taskAction } from "@/redux/reducers/tasks";
+import { confirmAction } from "@/redux/reducers/confirm";
 
 import { Button, Modal, Label, Checkbox } from "flowbite-react";
 import { SpinnerLoader, ErrorMessage } from "./Feed";
@@ -257,7 +261,7 @@ export const LogoutModal: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
 
                 <div className="mt-6 flex justify-center gap-x-4">
                   <button
-                    className={`py-2.5 px-4 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm w-[91.6094px] ${
+                    className={`py-2.5 px-4 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-red-orange-light transition-all text-sm w-[91.6094px] ${
                       loading && "cursor-not-allowed"
                     }`}
                     onClick={handleLogout}
@@ -271,7 +275,7 @@ export const LogoutModal: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
                   </button>
                   <button
                     type="button"
-                    className="py-2.5 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm w-[91.6094px]"
+                    className="py-2.5 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-red-orange text-white hover:bg-red-orange-dark focus:outline-none focus:ring-2 focus:ring-red-orange-light focus:ring-offset-2 transition-all text-sm w-[91.6094px]"
                     onClick={onSetShow}
                   >
                     Cancel
@@ -290,13 +294,40 @@ export const OptionTaskModal: React.FC<{
   onShow: boolean;
   onSetClose?: any;
   onFocus: any;
-}> = ({ onShow, onSetClose, onFocus }) => {
-  const HandleDeleteTask = () => {
-    console.log("Delete task test");
+  onIdTask?: any;
+  onGoingTaskData?: any;
+}> = ({ onShow, onSetClose, onFocus, onIdTask, onGoingTaskData }) => {
+  const useAppDispatch: () => AppDispatch = useDispatch;
+  const dispatch = useAppDispatch();
+
+  const handleDeleteTask = (e: any, IdTask: any) => {
+    if (Number(e.target.id) === IdTask) {
+      const id = IdTask;
+
+      const cbPending = () => {
+        console.info("Pending");
+      };
+      const cbFulfilled = () => {
+        console.info("Fulfilled");
+        window.location.reload();
+      };
+      const cbFinally = () => {
+        console.info("Finally");
+      };
+      return dispatch(
+        taskAction.deleteTasksThunk({ id, cbPending, cbFulfilled, cbFinally })
+      );
+    }
+    {
+      console.error("Exist something wrong!");
+    }
   };
 
-  const HandleRenameTask = () => {
-    console.log("Rename task test");
+  const handleRenameTask = (e: any, IdTask: any) => {
+    // if (Number(e.target.id) === IdTask) return console.log(onGoingTaskData);
+    const body = onGoingTaskData;
+    if (Number(e.target.id) === IdTask)
+      return dispatch(confirmAction.addDataToRename(body));
   };
 
   return (
@@ -309,7 +340,7 @@ export const OptionTaskModal: React.FC<{
         }
       >
         <button
-          className="absolute top-1 right-1 z-40"
+          className="absolute top-0 right-0 z-40 hover:bg-[#CCCED2] rounded-[100%] p-1"
           onClick={onSetClose}
         >
           <Icon icon="material-symbols:close" />
@@ -324,12 +355,12 @@ export const OptionTaskModal: React.FC<{
               className="w-[12px] h-[12px]"
             />
           </label>
-          <button id="edit" onClick={HandleRenameTask}>
+          <button id={onIdTask} onClick={(e) => handleRenameTask(e, onIdTask)}>
             Rename task
           </button>
         </span>
         <span className="text-[12px] flex items-center gap-x-1 cursor-pointer">
-          <label htmlFor="delete">
+          <label htmlFor={onIdTask}>
             <Image
               src={DeleteIcon}
               alt="Delete icon"
@@ -338,7 +369,13 @@ export const OptionTaskModal: React.FC<{
               className="w-[12px] h-[12px]"
             />
           </label>
-          <button id="delete" onClick={HandleDeleteTask}>
+          <button
+            id={onIdTask}
+            onClick={(e) => {
+              handleDeleteTask(e, onIdTask);
+            }}
+            // onClick={handleDeleteTask}
+          >
             Delete task
           </button>
         </span>

@@ -9,7 +9,7 @@ const Breadcrumb: React.FC<{ page?: string }> = ({ page = "Current page" }) => {
           className="flex items-center gap-1 text-xs text-gray-600"
         >
           <li>
-            <Link href="/home" className="block transition hover:text-blue-600">
+            <Link href="/home" className="block transition hover:text-red-orange-dark">
               <span className="sr-only"> Home </span>
 
               <svg

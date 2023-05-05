@@ -1,43 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { taskAction } from "@/redux/reducers/tasks";
 import type { AppDispatch } from "@/redux/store";
 import Image from "next/image";
+
+import { confirmAction } from "@/redux/reducers/confirm";
+
 import Menu from "../assets/icons/menu.png";
 import Calender from "../assets/icons/calendar.png";
-const InputTask: React.FC = () => {
+import { Icon } from "@iconify/react";
+
+const InputTask: React.FC<{ onBody?: any; isFulfilled?: boolean }> = ({
+  onBody,
+  isFulfilled,
+}) => {
   const useAppDispatch: () => AppDispatch = useDispatch;
   const dispatch = useAppDispatch();
 
+  // Section Add Task
   const [input, setInput] = useState({
     title: "",
     description: "",
   });
   const [date, setDate] = useState({ created_at: "" });
-
   const handleInput = (e: any) => {
     const { name, value } = e.target;
 
     if (name === "created_at") {
+      if (value === "") {
+        return setDate({ ...date, [name]: value });
+      }
       return setDate({ ...date, [name]: new Date(value).toISOString() });
     }
     setInput({ ...input, [name]: value });
   };
 
-  // console.log("Body:", { ...input, ...date });
-  // const validateEmptyString = (currentValue: any) => currentValue !== "";
-  // console.log(Object.values({ ...input, ...date }).every(validateEmptyString));
-
   const handleEnter = (e: any) => {
-    // console.log(e.key);
     if (e.key === "Enter") {
       if (
         Object.values({ ...input, ...date }).every(
           (currentValue: any) => currentValue !== ""
         )
       ) {
-        // return console.log("Body:", { ...body, ...date });
         const body = { ...input, ...date };
+
+        // console.log("Add task:", body)
 
         const cbPending = () => {
           console.info("Pending");
@@ -45,7 +52,7 @@ const InputTask: React.FC = () => {
 
         const cbFulfilled = () => {
           console.info("Fulfilled");
-          // window.location.reload();
+          window.location.reload();
         };
 
         const cbFinally = () => {
@@ -66,6 +73,92 @@ const InputTask: React.FC = () => {
     }
   };
 
+  console.log(onBody);
+
+  // Section Rename Task
+  const [inputRenameTask, setInputRenameTask] = useState({
+    title: "",
+    description: "",
+  });
+  const [updateDate, setUpdateDate] = useState({ updated_at: "" });
+  const [status, setStatus] = useState({
+    status_id: onBody?.status === "ongoing" ? 1 : 2,
+  });
+  const handleInputRenameTask = (e: any) => {
+    const { name, value } = e.target;
+
+    if (name === "updated_at") {
+      if (value === "") {
+        return setUpdateDate({ ...updateDate, [name]: value });
+      }
+      return setUpdateDate({
+        ...updateDate,
+        [name]: new Date(value).toISOString(),
+      });
+    }
+    setInputRenameTask({ ...inputRenameTask, [name]: value });
+  };
+
+  const handleEnterRenameTask = (e: any) => {
+    if (e.key === "Enter") {
+      if (
+        Object.values({ ...inputRenameTask, ...updateDate }).every(
+          (currentValue: any) => currentValue !== ""
+        )
+      ) {
+        const body = { ...inputRenameTask, ...updateDate, ...status };
+
+        // console.log("Rename task:", body);
+
+        const id = onBody.id;
+
+        const cbPending = () => {
+          console.info("Pending");
+        };
+
+        const cbFulfilled = () => {
+          console.info("Fulfilled");
+
+          window.location.reload();
+
+          // Refresh "resetDateToRename" to initial state
+          dispatch(confirmAction.resetDateToRename());
+        };
+
+        const cbFinally = () => {
+          console.info("Finallly");
+        };
+
+        dispatch(
+          taskAction.editTasksThunk({
+            body,
+            id,
+            cbPending,
+            cbFulfilled,
+            cbFinally,
+          })
+        );
+      } else {
+        console.info("Empty input!");
+      }
+    }
+  };
+
+  const handleCancelRenameTask = () => {
+    dispatch(confirmAction.resetDateToRename());
+  };
+
+  useEffect(() => {
+    setInputRenameTask({
+      title: onBody?.title,
+      description: onBody?.description,
+    });
+
+    setUpdateDate({
+      updated_at: onBody?.date,
+    });
+  }, [onBody?.title, onBody?.description, onBody?.date]);
+
   return (
     <>
       <div className="flex gap-x-4">
@@ -76,57 +169,132 @@ const InputTask: React.FC = () => {
             disabled
           />
         </div>
-        <div className="flex flex-col w-[100%]">
-          <input
-            type="text"
-            name="title"
-            id="title"
-            placeholder="Masukan nama tugas"
-            className="border-none focus:ring-0 w-[100%] bg-transparent pl-0"
-            onChange={handleInput}
-            onKeyDown={handleEnter}
-          />
-          <span className="flex items-center">
-            <label htmlFor="description">
-              <Image
-                src={Menu}
-                width={1000}
-                height={1000}
-                alt="menu"
-                className="w-[20px] h-[20px]"
+        {isFulfilled && (
+          <div className="flex flex-col w-[100%]">
+            <span className="flex">
+              <input
+                type="text"
+                name="title"
+                id="title"
+                placeholder="Masukan nama tugas"
+                className="border-none focus:ring-0 w-[100%] bg-transparent pl-0"
+                onChange={(e) => handleInputRenameTask(e)}
+                onKeyDown={handleEnterRenameTask}
+                value={inputRenameTask.title}
               />
-            </label>
+              <button onClick={handleCancelRenameTask}>
+                <Icon
+                  icon="material-symbols:cancel-outline-rounded"
+                  width="32"
+                  height="32"
+                  className="text-[#7A7F83] hover:text-red-orange"
+                />
+              </button>
+            </span>
+            <span className="flex">
+              <label htmlFor="description">
+                <Image
+                  src={Menu}
+                  width={1000}
+                  height={1000}
+                  alt="menu"
+                  className="w-[20px] h-[20px]"
+                />
+              </label>
+              <input
+                type="text"
+                name="description"
+                id="description"
+                placeholder="Deskripsi Tugas (Optional)"
+                className="border-none focus:ring-0 text-[14px] w-[100%] bg-transparent"
+                onChange={(e) => {
+                  handleInputRenameTask(e);
+                }}
+                onKeyDown={handleEnterRenameTask}
+                value={inputRenameTask.description}
+              />
+            </span>
+            <span className="flex items-center">
+              <label htmlFor="updated_at">
+                <Image
+                  src={Calender}
+                  width={1000}
+                  height={1000}
+                  alt="calender"
+                  className="w-[20px] h-[20px]"
+                />
+              </label>
+              <input
+                type="datetime-local"
+                name="updated_at"
+                id="updated_at"
+                placeholder="Tanggal & Waktu"
+                className="focus:ring-0 text-[14px]"
+                onChange={(e) => {
+                  handleInputRenameTask(e);
+                }}
+                onKeyDown={handleEnterRenameTask}
+              />
+            </span>
+          </div>
+        )}
+        {!isFulfilled && (
+          <div className="flex flex-col w-[100%]">
             <input
               type="text"
-              name="description"
-              id="description"
-              placeholder="Deskripsi Tugas (Optional)"
-              className="border-none focus:ring-0 text-[14px] w-[100%] bg-transparent"
-              onChange={handleInput}
+              name="title"
+              id="title"
+              placeholder="Masukan nama tugas"
+              className="border-none focus:ring-0 w-[100%] bg-transparent pl-0"
+              onChange={(e) => handleInput(e)}
               onKeyDown={handleEnter}
             />
-          </span>
-          <span className="flex items-center">
-            <label htmlFor="created_at">
-              <Image
-                src={Calender}
-                width={1000}
-                height={1000}
-                alt="calender"
-                className="w-[20px] h-[20px]"
+            <span className="flex items-center">
+              <label htmlFor="description">
+                <Image
+                  src={Menu}
+                  width={1000}
+                  height={1000}
+                  alt="menu"
+                  className="w-[20px] h-[20px]"
+                />
+              </label>
+              <input
+                type="text"
+                name="description"
+                id="description"
+                placeholder="Deskripsi Tugas (Optional)"
+                className="border-none focus:ring-0 text-[14px] w-[100%] bg-transparent"
+                onChange={(e) => {
+                  handleInput(e);
+                }}
+                onKeyDown={handleEnter}
               />
-            </label>
-            <input
-              type="datetime-local"
-              name="created_at"
-              id="created_at"
-              placeholder="Tanggal & Waktu"
-              className="focus:ring-0 text-[14px]"
-              onChange={handleInput}
-              onKeyDown={handleEnter}
-            />
-          </span>
-        </div>
+            </span>
+            <span className="flex items-center">
+              <label htmlFor="created_at">
+                <Image
+                  src={Calender}
+                  width={1000}
+                  height={1000}
+                  alt="calender"
+                  className="w-[20px] h-[20px]"
+                />
+              </label>
+              <input
+                type="datetime-local"
+                name="created_at"
+                id="created_at"
+                placeholder="Tanggal & Waktu"
+                className="focus:ring-0 text-[14px]"
+                onChange={(e) => {
+                  handleInput(e);
+                }}
+                onKeyDown={handleEnter}
+              />
+            </span>
+          </div>
+        )}
       </div>
     </>
   );
@@ -172,4 +340,4 @@ const InputProfile: React.FC<{
   );
 };
 
-export { InputTask, InputProfile };
+export { InputTask, InputProfile, InputTask as InputEditTask };

@@ -3,10 +3,16 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useToggle } from "usehooks-ts";
 import { getCookie } from "cookies-next";
-import { InputTask } from "./Input";
+
+import { InputTask, InputEditTask } from "./Input";
 import { OngoingTasks, DoneTasks } from "./Task";
 import { SortingDropDown } from "./Forms";
-import { AddTaskButton, DoneTaskButton, SortingButton } from "./Button";
+import {
+  AddTaskButton,
+  DoneTaskButton,
+  SortingButton,
+  RenameButton,
+} from "./Button";
 import { WelcomeMessage } from "./Feed";
 
 const Main = () => {
@@ -16,6 +22,9 @@ const Main = () => {
   const [accessToken, setAccessToken] = useState<any>(getCookie("token"));
   const doneTasks = useSelector(
     (state: RootState) => state.tasks.retriveDoneTasks.data.data
+  );
+  const dataToRename = useSelector(
+    (state: RootState) => state.confirm.taskDataToRename
   );
 
   return (
@@ -40,9 +49,15 @@ const Main = () => {
                     </p>
                   </div>
                   <div className="ml-auto">
-                    <AddTaskButton
-                      onSetToggle={() => setHiddenAddTask(!hiddenAddTask)}
-                    />
+                    {dataToRename?.isFulfilled && (
+                      <RenameButton init="Rename Task" />
+                    )}
+                    {!dataToRename?.isFulfilled && (
+                      <AddTaskButton
+                        onSetToggle={() => setHiddenAddTask(!hiddenAddTask)}
+                        init="Tambah Tugas"
+                      />
+                    )}
                   </div>
                 </section>
                 <section className="flex items-center">
@@ -54,11 +69,19 @@ const Main = () => {
                     <SortingDropDown onHidden={hidden} />
                   </div>
                 </section>
-                <section
-                  className={!hiddenAddTask ? "hidden" : "p-2 bg-[#F5F5F5]"}
-                >
-                  <InputTask />
-                </section>
+                {hiddenAddTask && (
+                  <section className="p-2 bg-[#F5F5F5]">
+                    <InputTask />
+                  </section>
+                )}
+                {dataToRename?.isFulfilled && (
+                  <section className="p-2 bg-[#F5F5F5]">
+                    <InputEditTask
+                      onBody={dataToRename?.data}
+                      isFulfilled={dataToRename?.isFulfilled}
+                    />
+                  </section>
+                )}
                 <section>
                   <div className="p-2">
                     <OngoingTasks />

@@ -9,11 +9,11 @@ import AvatarIcon from "../assets/icons/avatar.png";
 import { AuthModal, LogoutModal } from "./Modal";
 import { getCookie } from "cookies-next";
 
-const Header: React.FC = () => {
+const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
   const [hiddenClickOutside, setHiddenClickOutside] = useState<Boolean>(true);
   const [hiddenClickInside, setHiddenClickInside] = useState<Boolean>(true);
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
-  const [accessToken, setAccessToken] = useState<any>();
+  const [accessToken, setAccessToken] = useState<any>(getCookie("token"));
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleClickInside = () => {
@@ -26,11 +26,6 @@ const Header: React.FC = () => {
     setHiddenClickOutside(!hiddenClickOutside);
   };
   useOnClickOutside(userProfile, handleClickOutside);
-
-  useEffect(() => {
-    const token = getCookie("token");
-    setAccessToken(token);
-  }, []);
 
   return (
     <>
@@ -57,7 +52,7 @@ const Header: React.FC = () => {
         <section className="ml-auto flex gap-x-4">
           {!accessToken ? (
             <button
-              className="text-white bg-red-orange hover:bg-[#f3551c] text-sm rounded-lg font-medium px-5 py-2.5 focus:ring-4 focus:ring-[#ffb291]"
+              className="text-white bg-red-orange hover:bg-[#f3551c] text-sm rounded-lg font-medium px-5 py-2.5 focus:ring-2 focus:ring-offset-2 focus:ring-[#ffb291]"
               onClick={() => setShowAuthModal(true)}
             >
               Login
@@ -90,7 +85,7 @@ const Header: React.FC = () => {
                     className={
                       hiddenClickInside || hiddenClickOutside
                         ? "flex items-center text-sm font-medium gap-x-2 rounded-full z-40"
-                        : "flex items-center text-sm font-medium gap-x-2 focus:ring focus:ring-[#ffb291] rounded-full z-40"
+                        : "flex items-center text-sm font-medium gap-x-2 focus:ring-2 focus:ring-offset-2 focus:ring-[#ffb291] rounded-full z-40"
                     }
                     onClick={handleClickInside}
                   >
@@ -130,12 +125,19 @@ const Header: React.FC = () => {
                   </div>
                   <ul className="py-2 text-sm text-gray-700">
                     <li>
-                      <Link
-                        href="/users/profile"
-                        className="block px-4 py-2 hover:bg-gray-100"
-                      >
-                        Settings
-                      </Link>
+                      {!onActive && (
+                        <Link
+                          href="/users/profile"
+                          className="block px-4 py-2 hover:bg-gray-100"
+                        >
+                          Settings
+                        </Link>
+                      )}
+                      {onActive && (
+                        <p className={`${onActive} block px-4 py-2`}>
+                          Settings
+                        </p>
+                      )}
                     </li>
                   </ul>
                   <div className="py-2">
