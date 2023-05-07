@@ -131,17 +131,7 @@ const editNoTelpThunk = createAsyncThunk(
 const userSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {
-    // reset: (prevState) => {
-    //   return {
-    //     ...prevState,
-    //     retriveProfile: null,
-    //     editProfile: null,
-    //     uploadImageProfile: null,
-    //     editNoTelp: null,
-    //   };
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(retriveProfileThunk.pending, (prevState) => {
       return {

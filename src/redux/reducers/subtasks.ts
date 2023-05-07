@@ -66,7 +66,7 @@ const retriveSubtasksThunk = createAsyncThunk(
         console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
-        console.log(error);
+        console.error(error);
         throw error;
       }
     } finally {
@@ -90,7 +90,7 @@ const createSubtasksThunk = createAsyncThunk(
         console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
-        console.log(error);
+        console.error(error);
         throw error;
       }
     } finally {
@@ -114,7 +114,7 @@ const editSubtasksThunk = createAsyncThunk(
         console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
-        console.log(error);
+        console.error(error);
         throw error;
       }
     } finally {
@@ -138,7 +138,7 @@ const editStatusSubtasksThunk = createAsyncThunk(
         console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
-        console.log(error);
+        console.error(error);
         throw error;
       }
     } finally {
@@ -162,7 +162,7 @@ const deleteSubtasksThunk = createAsyncThunk(
         console.error(error.response.data?.msg);
         throw error.response.data?.msg;
       } else {
-        console.log(error);
+        console.error(error);
         throw error;
       }
     } finally {
@@ -175,16 +175,54 @@ const subtasksSlice = createSlice({
   name: "subtasks",
   initialState,
   reducers: {
-    // reset: (prevState) => {
-    //   return {
-    //     ...prevState,
-    //     retriveSubtasks: null,
-    //     createSubtasks: null,
-    //     editSubtasks: null,
-    //     editStatusSubtasks: null,
-    //     deleteSubtasks: null,
-    //   };
-    // },
+    resetCreateSubtask: (prevState) => {
+      return {
+        ...prevState,
+        createSubtasks: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    },
+    resetEditSubtasks: (prevState) => {
+      return {
+        ...prevState,
+        editSubtasks: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    },
+    resetEditStatusSubtasks: (prevState) => {
+      return {
+        ...prevState,
+        editStatusSubtasks: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    },
+    resetDeleteSubtasks: (prevState) => {
+      return {
+        ...prevState,
+        deleteSubtasks: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(retriveSubtasksThunk.pending, (prevState) => {

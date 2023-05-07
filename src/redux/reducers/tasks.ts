@@ -210,17 +210,54 @@ const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    // reset: (prevState) => {
-    //   return {
-    //     ...prevState,
-    //     retriveOngoingTasks: null,
-    //     retriveDoneTasks: null,
-    //     createTasks: null,
-    //     editTasks: null,
-    //     editStatusTask: null,
-    //     deleteTasks: null,
-    //   };
-    // },
+    resetCreateTask: (prevState) => {
+      return {
+        ...prevState,
+        createTasks: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    },
+    resetEditTasks: (prevState) => {
+      return {
+        ...prevState,
+        editTasks: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    },
+    resetEditStatusTasks: (prevState) => {
+      return {
+        ...prevState,
+        editStatusTasks: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    },
+    deleteTasks: (prevState) => {
+      return {
+        ...prevState,
+        deleteTasks: {
+          isLoading: false,
+          isFulfilled: false,
+          isRejected: false,
+          data: null,
+          err: null,
+        },
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(retriveOngoingTasksThunk.pending, (prevState) => {
