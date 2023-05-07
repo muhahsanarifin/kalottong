@@ -12,10 +12,10 @@ const config = (accessToken: any) => {
 };
 
 export const retriveOngoingTasks = (accessToken: any, params: ParamsArg) =>
-  Axios.get(`${BASE_URL}/tasks?${params}`, config(accessToken));
+  Axios.get(`${BASE_URL}/tasks${params}`, config(accessToken));
 
 export const retriveDoneTasks = (accessToken: any, params: ParamsArg) =>
-  Axios.get(`${BASE_URL}/tasks?${params}`, config(accessToken));
+  Axios.get(`${BASE_URL}/tasks${params}`, config(accessToken));
 
 export const createTasks = (accessToken: any, body: any) =>
   Axios.post(`${BASE_URL}/tasks/create`, body, config(accessToken));
