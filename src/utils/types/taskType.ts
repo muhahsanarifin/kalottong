@@ -6,4 +6,5 @@ export type TaskProps = {
 // Subtasks
 export type SubtasksProps = {
   idTasks?: any;
+  statusTasks?: any;
 };

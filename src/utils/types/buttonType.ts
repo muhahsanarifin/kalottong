@@ -28,7 +28,7 @@ export type BackButtonProps = {
 export type RegulerButtonProps = {
   onSetAction?: any;
   title: string;
-  onDisable: boolean;
+  onDisable?: boolean;
 };
 
 export type SaveInputProfileButtonProps = {
