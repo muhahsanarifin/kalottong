@@ -7,58 +7,67 @@ import { register, login } from "@/utils/api/auth";
 import { SpinnerLoader, ErrorMessage } from "./Feed";
 import { setCookie } from "cookies-next";
 
-const SortingDropDown: React.FC<SortingDropDownsProps> = ({ onHidden }) => {
+const SortingDropDown: React.FC<SortingDropDownsProps> = ({ onHidden, onSetSort }) => {
+  const sorts = [
+    {
+      id: 0,
+      name: "Terbaru",
+      value: "new",
+    },
+    {
+      id: 2,
+      name: "Terlama",
+      value: "old",
+    },
+    {
+      id: 3,
+      name: "By Update",
+      value: "updated",
+    },
+    {
+      id: 4,
+      name: "By a-z",
+      value: "a-z",
+    },
+    {
+      id: 5,
+      name: "By z-a",
+      value: "z-a",
+    },
+  ];
+
+  const handleSort = (e: any) => {
+    onSetSort(e.target.value);
+  };
+
   return (
     <>
       <ul
         className={
           !onHidden
             ? "hidden"
-            : "border-solid border-2 border-[#CCCED2] bg-white absolute w-[300px] h-[144px] right-0 p-[1rem] rounded-[8px] flex flex-col gap-[1rem] mt-2"
+            : "border-solid border-2 border-[#CCCED2] bg-white absolute w-[300px] m-h-[144px] right-0 p-[1rem] rounded-[8px] flex flex-col gap-[1rem] mt-2 z-50"
         }
       >
-        <li className="w-full border-solid">
-          <div className="flex items-center">
-            <label htmlFor="by-tanggal" className="text-cyan-blue font-[400]">
-              By Tanggal
-            </label>
-            <input
-              name="sort"
-              id="by-tanggal"
-              type="radio"
-              value="by-tanggal"
-              className="w-[24px] h-[24px] text-red-orange bg-transparent border-gray-300 rounded-[100%] focus:ring-red-orange ml-auto"
-            />
-          </div>
-        </li>
-        <li className="w-full">
-          <div className="flex items-center">
-            <label htmlFor="by-time" className="text-cyan-blue font-[400]">
-              By Time
-            </label>
-            <input
-              name="sort"
-              id="by-time"
-              type="radio"
-              value="by-time"
-              className="w-[24px] h-[24px] text-red-orange bg-transparent border-gray-300 rounded-[100%] focus:ring-red-orange ml-auto"
-            />
-          </div>
-        </li>
-        <li className="w-full">
-          <div className="flex items-center">
-            <label htmlFor="terbaru" className="text-cyan-blue font-[400]">
-              Terbaru
-            </label>
-            <input
-              name="sort"
-              id="terbaru"
-              type="radio"
-              value="terbaru"
-              className="w-[24px] h-[24px] text-red-orange bg-transparent border-gray-300 rounded-[100%] focus:ring-red-orange ml-auto"
-            />
-          </div>
-        </li>
+        {sorts.map((sort: any, idx: any) => (
+          <>
+            <li className="w-full">
+              <div className="flex items-center">
+                <label htmlFor="terbaru" className="text-cyan-blue font-[400]">
+                  {sort?.name}
+                </label>
+                <input
+                  name="sort"
+                  id={sort?.value}
+                  type="radio"
+                  value={sort?.value}
+                  className="w-[24px] h-[24px] text-red-orange bg-transparent border-gray-300 rounded-[100%] focus:ring-red-orange ml-auto"
+                  onClick={(e) => handleSort(e)}
+                />
+              </div>
+            </li>
+          </>
+        ))}
       </ul>
     </>
   );

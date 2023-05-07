@@ -192,6 +192,16 @@ const BackButton: React.FC<BackButtonProps> = ({ onRoute, title }) => {
   );
 };
 
+const ResetButton: React.FC<{title: any; onsetReset: any}> = ({title, onsetReset}) => {
+  return (
+    <>
+      <button className="bg-red-orange rounded-[60px] text-white hover:bg-red-orange-dark py-1 px-4 text-sm" onClick={onsetReset}>
+        {title}
+      </button>
+    </>
+  );
+}
+
 const RegulerButton: React.FC<RegulerButtonProps> = ({
   onSetAction,
   title,
@@ -280,4 +290,5 @@ export {
   SaveInputProfileButton,
   SaveImageProfileButton,
   AddTaskButton as RenameButton,
+  ResetButton,
 };

@@ -189,7 +189,7 @@ const InputTask: React.FC<{ onBody?: any; isFulfilled?: boolean }> = ({
                 />
               </button>
             </span>
-            <span className="flex">
+            <span className="flex items-center">
               <label htmlFor="description">
                 <Image
                   src={Menu}

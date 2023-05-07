@@ -5,20 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 
 import type { RootState, AppDispatch } from "@/redux/store";
 import { taskAction } from "@/redux/reducers/tasks";
-import { subtasksAction } from "@/redux/reducers/subtasks";
-import { SubtasksProps } from "@/utils/types/taskType";
+
 import { formatDate } from "@/utils/date";
 
-import {
-  TaskDropDownButton,
-  AddSubTaskButton,
-  DeleteSubTaskButton,
-  MoreButton,
-} from "./Button";
+import { TaskDropDownButton, MoreButton } from "./Button";
 import { TaskSkeletonLoader } from "./Feed";
 import { OptionTaskModal } from "./Modal";
+import { SubTask } from "./Subtask";
 
-const OngoingTasks: React.FC = () => {
+export const OngoingTasks: React.FC<{ [key: string]: any }> = ({
+  onPage,
+  onSort,
+}) => {
   const useAppDispatch: () => AppDispatch = useDispatch;
   const dispatch = useAppDispatch();
   const ongoingTasks = useSelector(
@@ -29,11 +27,14 @@ const OngoingTasks: React.FC = () => {
   const [pendingOngoingTasks, setPendingOngoingTasks] =
     useState<boolean>(false);
   const [showOptionTaskModal, setshowOptionTaskModal] = useState(false);
+  const [status, setStatus] = useState("ongoing");
+  const [limit, setLimit] = useState<number>(5);
 
   useEffect(() => {
-    const params = `status=ongoing`;
+    const params = `?status=${status}&sort=${onSort}&limit=${limit}&page=${onPage}`;
 
     const cbPending = () => {
+      dispatch(taskAction.resetCreateTask());
       setPendingOngoingTasks(true);
     };
     const cbFulfilled = () => {
@@ -52,7 +53,7 @@ const OngoingTasks: React.FC = () => {
         cbFinally,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, onSort, status, limit, onPage]);
 
   const handleCheckbox = (e: any, title: string, description: string) => {
     const body = {
@@ -153,7 +154,7 @@ const OngoingTasks: React.FC = () => {
                       : "p-2 bg-[#F5F5F5] flex flex-col gap-y-2"
                   }
                 >
-                  <SubTask idTasks={task.id} />
+                  <SubTask idTasks={task.id} statusTasks={task.status}/>
                 </div>
               </li>
             </>
@@ -163,7 +164,7 @@ const OngoingTasks: React.FC = () => {
   );
 };
 
-const DoneTasks: React.FC = () => {
+export const DoneTasks: React.FC = () => {
   const useAppDispatch: () => AppDispatch = useDispatch;
   const dispatch = useAppDispatch();
   const doneTasks = useSelector(
@@ -174,7 +175,7 @@ const DoneTasks: React.FC = () => {
   const [pendingDoneTasks, setPendingDoneTasks] = useState(false);
 
   useEffect(() => {
-    const params = `status=done`;
+    const params = `?status=done`;
 
     const cbPending = () => {
       setPendingDoneTasks(true);
@@ -279,7 +280,7 @@ const DoneTasks: React.FC = () => {
                       : "p-2 bg-[#F5F5F5] flex flex-col gap-y-2"
                   }
                 >
-                  <SubTask idTasks={task.id} />
+                  <SubTask idTasks={task.id} statusTasks={task.status} />
                 </div>
               </li>
             </>
@@ -288,109 +289,3 @@ const DoneTasks: React.FC = () => {
     </>
   );
 };
-
-const SubTask: React.FC<SubtasksProps> = ({ idTasks }) => {
-  const useAppDispatch: () => AppDispatch = useDispatch;
-  const dispatch = useAppDispatch();
-  const subTasks = useSelector(
-    (state: RootState) => state.subtasks.retriveSubtasks.data.data
-  );
-
-  useEffect(() => {
-    const cbPending = () => {
-      console.info("Pending");
-    };
-
-    const cbFulfilled = () => {
-      console.info("Fulfilled");
-    };
-
-    const cbFinally = () => {
-      console.info("Finally");
-    };
-
-    dispatch(
-      subtasksAction.retriveSubtasksThunk({ cbPending, cbFulfilled, cbFinally })
-    );
-  }, [dispatch]);
-
-  const handleCheckboxSubtasks = (e: any, title: string) => {
-    console.info(e.target.checked);
-    // console.log(id)
-
-    const body = {
-      title: title,
-      status_id: e.target.checked ? 2 : 1,
-    };
-
-    const id = e.target.id;
-
-    const cbPending = () => {
-      console.info("Pending");
-    };
-
-    const cbFulfilled = () => {
-      console.info("Fulfilled");
-    };
-
-    const cbFinally = () => {
-      console.info("Finally");
-      window.location.reload();
-    };
-
-    dispatch(
-      subtasksAction.editStatusSubtasksThunk({
-        body,
-        id,
-        cbPending,
-        cbFulfilled,
-        cbFinally,
-      })
-    );
-  };
-
-  return (
-    <>
-      <div className="flex items-center">
-        <h1 className="font-[500] text-cyan-blue">Subtask</h1>
-        <AddSubTaskButton />
-      </div>
-      <ul className="flex flex-col gap-y-2">
-        {subTasks?.map(
-          (subtask: any, idx: any) =>
-            subtask.tasks_id === idTasks && (
-              <>
-                <li className="flex items-center" key={subtask.id}>
-                  <div className="flex items-center gap-x-2">
-                    <input
-                      type="checkbox"
-                      name="subtask"
-                      id={subtask.id}
-                      className="rounded-[100%] w-[1.75rem] h-[1.75rem] text-red-orange focus:ring-red-orange"
-                      onClick={(e) => {
-                        handleCheckboxSubtasks(e, subtask.title);
-                      }}
-                      checked={subtask.status_id === 1 ? false : true}
-                    />
-                    <label
-                      htmlFor={subtask.id}
-                      className={`text-[400] text-cyan-blue ${
-                        subtask.status_id === 2 && "line-through"
-                      }`}
-                    >
-                      {subtask.title}
-                    </label>
-                  </div>
-                  <div className=" ml-auto">
-                    <DeleteSubTaskButton />
-                  </div>
-                </li>
-              </>
-            )
-        )}
-      </ul>
-    </>
-  );
-};
-
-export { OngoingTasks, DoneTasks, SubTask };
