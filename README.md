@@ -36,6 +36,15 @@
 git clone https://github.com/muhahsanarifin/kalottong.git
 ```
 
+## Demo
+
+» Demo account
+
+```sh
+Email: anakbodoh@gmail.com
+Password: anakbodoh
+```
+
 <!-- CONTRIBUTING -->
 
 # Contributing
