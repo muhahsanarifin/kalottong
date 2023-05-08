@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 
@@ -6,6 +6,7 @@ import { subtasksAction } from "@/redux/reducers/subtasks";
 import { SubtasksProps } from "@/utils/types/taskType";
 
 import { AddSubTaskButton, DeleteSubTaskButton } from "./Button";
+import { InputSubTasks } from "../components/Input";
 
 export const SubTask: React.FC<SubtasksProps> = ({ idTasks, statusTasks }) => {
   const useAppDispatch: () => AppDispatch = useDispatch;
@@ -13,6 +14,7 @@ export const SubTask: React.FC<SubtasksProps> = ({ idTasks, statusTasks }) => {
   const subTasks = useSelector(
     (state: RootState) => state.subtasks.retriveSubtasks.data.data
   );
+  const [toggleAddSubTask, setToggleAddSubTask] = useState(false);
 
   useEffect(() => {
     const cbPending = () => {
@@ -21,6 +23,7 @@ export const SubTask: React.FC<SubtasksProps> = ({ idTasks, statusTasks }) => {
 
     const cbFulfilled = () => {
       console.info("Fulfilled");
+      dispatch(subtasksAction.resetCreateSubtask());
     };
 
     const cbFinally = () => {
@@ -34,7 +37,6 @@ export const SubTask: React.FC<SubtasksProps> = ({ idTasks, statusTasks }) => {
 
   const handleCheckboxSubtasks = (e: any, title: string) => {
     console.info(e.target.checked);
-    // console.log(id)
 
     const body = {
       title: title,
@@ -69,9 +71,16 @@ export const SubTask: React.FC<SubtasksProps> = ({ idTasks, statusTasks }) => {
 
   return (
     <>
-      <div className="flex items-center">
-        <h1 className="font-[500] text-cyan-blue">Subtask</h1>
-        {statusTasks === "ongoing" && <AddSubTaskButton />}
+      <div className="flex flex-col">
+        <div className="flex items-center">
+          <h1 className="font-[500] text-cyan-blue">Subtask</h1>
+          {statusTasks === "ongoing" && (
+            <AddSubTaskButton
+              onSetToggle={() => setToggleAddSubTask(!toggleAddSubTask)}
+            />
+          )}
+        </div>
+        {toggleAddSubTask && <InputSubTasks onIdTask={idTasks} />}
       </div>
       <ul className="flex flex-col gap-y-2">
         {subTasks?.map(
@@ -100,7 +109,7 @@ export const SubTask: React.FC<SubtasksProps> = ({ idTasks, statusTasks }) => {
                     </label>
                   </div>
                   <div className=" ml-auto">
-                    <DeleteSubTaskButton />
+                    <DeleteSubTaskButton onSubtaskId={subtask.id} />
                   </div>
                 </li>
               </>

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch } from "@/redux/store";
-import { useToggle } from "usehooks-ts";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 import { getCookie } from "cookies-next";
 
 import { InputTask, InputEditTask } from "./Input";
@@ -16,12 +15,10 @@ import {
 } from "./Button";
 import { WelcomeMessage } from "./Feed";
 import { Paginations } from "./Pagination";
-import { taskAction } from "@/redux/reducers/tasks";
 
 const Main = () => {
-  const useAppDispatch: () => AppDispatch = useDispatch;
-  const dispatch = useAppDispatch();
-  const [hidden, toggle] = useToggle();
+  const [hiddenClickInside, setHiddenClickInside] = useState<boolean>(true);
+  const [hiddenClickOutside, setHiddenClickOutside] = useState<boolean>(true);
   const [hiddenAddTask, setHiddenAddTask] = useState(false);
   const [hiddenDoneTask, setHiddenDoneTask] = useState(false);
   const [accessToken, setAccessToken] = useState<any>(getCookie("token"));
@@ -78,8 +75,19 @@ const Main = () => {
                       Sort By
                     </p>
                     <div className="ml-auto relative">
-                      <SortingButton onSetToggle={toggle} onHidden={hidden} />
-                      <SortingDropDown onHidden={hidden} onSetSort={setSort} />
+                      <SortingButton
+                        onSetClickInside={setHiddenClickInside}
+                        onHiddenInside={hiddenClickInside}
+                        onHiddenOutside={hiddenClickOutside}
+                        onTitleSort={sort}
+                      />
+                      <SortingDropDown
+                        onHiddenInside={hiddenClickInside}
+                        onHiddenOutside={hiddenClickOutside}
+                        onSetSort={setSort}
+                        onSetClickOutside={setHiddenClickOutside}
+                        onSetClickInside={setHiddenClickInside}
+                      />
                     </div>
                   </div>
                   {sort && (

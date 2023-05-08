@@ -5,6 +5,7 @@ import type { AppDispatch } from "@/redux/store";
 import Image from "next/image";
 
 import { confirmAction } from "@/redux/reducers/confirm";
+import { subtasksAction } from "@/redux/reducers/subtasks";
 
 import Menu from "../assets/icons/menu.png";
 import Calender from "../assets/icons/calendar.png";
@@ -338,4 +339,76 @@ const InputProfile: React.FC<{
   );
 };
 
-export { InputTask, InputProfile, InputTask as InputEditTask };
+const InputSubTasks: React.FC<{ onIdTask: any }> = ({ onIdTask }) => {
+  const useAppDispatch: () => AppDispatch = useDispatch;
+  const dispatch = useAppDispatch();
+
+  const [input, setInput] = useState({
+    tasks_id: onIdTask,
+    status_id: 1,
+    title: "",
+  });
+
+  const HandleInput = (e: any) => {
+    const { value, name } = e.target;
+    setInput({ ...input, [name]: value });
+  };
+
+  const HandleEnter = (e: any) => {
+    if (e.key === "Enter") {
+      if (input.title) {
+        const body = input;
+
+        const cbPending = () => {
+          console.info("Pending");
+        };
+
+        const cbFulfilled = () => {
+          console.info("Fulfilled");
+
+          window.location.reload();
+        };
+
+        const cbFinally = () => {
+          console.info("Finally");
+        };
+
+        return dispatch(
+          subtasksAction.createSubtasksThunk({
+            body,
+            cbPending,
+            cbFulfilled,
+            cbFinally,
+          })
+        );
+      } else {
+        console.info("Empty input!");
+      }
+    }
+  };
+
+  return (
+    <>
+      <div className="flex items-center">
+        <div className="flex">
+          <input
+            type="checkbox"
+            className="rounded-[100%] w-[1.75rem] h-[1.75rem] text-red-orange focus:ring-red-orange"
+            disabled
+          />
+        </div>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          placeholder="Masukan nama sub-tugas."
+          className="bg-transparent focus:ring-0 w-full border-none text-[14px]"
+          onChange={HandleInput}
+          onKeyDown={HandleEnter}
+        />
+      </div>
+    </>
+  );
+};
+
+export { InputTask, InputProfile, InputTask as InputEditTask, InputSubTasks };

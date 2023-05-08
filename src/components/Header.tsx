@@ -24,8 +24,8 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
   const profileLoading = useSelector(
     (state: RootState) => state.user.retriveProfile?.isLoading
   );
-  const [hiddenClickOutside, setHiddenClickOutside] = useState<Boolean>(true);
-  const [hiddenClickInside, setHiddenClickInside] = useState<Boolean>(true);
+  const [hiddenClickOutside, setHiddenClickOutside] = useState<boolean>(true);
+  const [hiddenClickInside, setHiddenClickInside] = useState<boolean>(true);
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<any>(getCookie("token"));
   const [showLogoutModal, setShowLogoutModal] = useState(false);

@@ -1,13 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { useOnClickOutside } from "usehooks-ts";
+import Link from "next/link";
+import { setCookie } from "cookies-next";
+import { register, login } from "@/utils/api/auth";
 import { Button, Label, TextInput, Checkbox, Radio } from "flowbite-react";
 import { SortingDropDownsProps } from "@/utils/types/formType";
-import Link from "next/link";
-import { RegulerButton } from "./Button";
-import { register, login } from "@/utils/api/auth";
-import { SpinnerLoader, ErrorMessage } from "./Feed";
-import { setCookie } from "cookies-next";
 
-const SortingDropDown: React.FC<SortingDropDownsProps> = ({ onHidden, onSetSort }) => {
+import { RegulerButton } from "./Button";
+import { SpinnerLoader, ErrorMessage } from "./Feed";
+
+export const SortingDropDown: React.FC<SortingDropDownsProps> = ({
+  onSetSort,
+  onHiddenOutside,
+  onSetClickOutside,
+  onHiddenInside,
+  onSetClickInside,
+}) => {
+  const sortList = useRef(null);
+
+  const handleClickOutside = () => {
+    onSetClickInside(true);
+    onSetClickOutside(!onHiddenOutside);
+  };
+
+  useOnClickOutside(sortList, handleClickOutside);
+
   const sorts = [
     {
       id: 0,
@@ -43,8 +60,9 @@ const SortingDropDown: React.FC<SortingDropDownsProps> = ({ onHidden, onSetSort 
   return (
     <>
       <ul
+        ref={sortList}
         className={
-          !onHidden
+          onHiddenInside || onHiddenOutside
             ? "hidden"
             : "border-solid border-2 border-[#CCCED2] bg-white absolute w-[300px] m-h-[144px] right-0 p-[1rem] rounded-[8px] flex flex-col gap-[1rem] mt-2 z-50"
         }
@@ -73,7 +91,7 @@ const SortingDropDown: React.FC<SortingDropDownsProps> = ({ onHidden, onSetSort 
   );
 };
 
-const RegisterForm: React.FC = () => {
+export const RegisterForm: React.FC = () => {
   const [agree, setAgree] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [errorResponse, setErrorResponse] = useState<any>("");
@@ -255,7 +273,7 @@ const RegisterForm: React.FC = () => {
   );
 };
 
-const ResetPasswordForm: React.FC = () => {
+export const ResetPasswordForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   return (
     <>
@@ -287,12 +305,10 @@ const ResetPasswordForm: React.FC = () => {
         />
         <RegulerButton
           title="Submit"
-          onSetAction={() => console.log("Test")}
+          onSetAction={() => console.log("Reset password test.")}
           onDisable={!email}
         />
       </div>
     </>
   );
 };
-
-export { SortingDropDown, RegisterForm, ResetPasswordForm };

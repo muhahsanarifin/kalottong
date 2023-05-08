@@ -1,13 +1,20 @@
+import React from "react";
+import { useDispatch } from "react-redux";
 import Image from "next/image";
+import { Icon } from "@iconify/react";
+import Link from "next/link";
+import { Button } from "flowbite-react";
+
+import { subtasksAction } from "@/redux/reducers/subtasks";
+import { AppDispatch } from "@/redux/store";
+
 import AddTaskIcon from "../assets/icons/plus.png";
 import AddSubTaskIcon from "../assets/icons/plus-red-orange.png";
 import ArrowDownOrange from "../assets/icons/arrow-down-2-red-orange.png";
 import ArrowDown from "../assets/icons/arrow-down-2.png";
 import ArrowUpGray from "../assets/icons/arrow-up-2-gray.png";
 import ArrowRight from "../assets/icons/arrow-right-2.png";
-import TrashIcon from "../assets/icons/trash.png";
 import MoreIcon from "../assets/icons/more-vertical.png";
-import { Icon } from "@iconify/react";
 import {
   SortingButtonProps,
   TaskDropDownButtonProps,
@@ -18,8 +25,6 @@ import {
   SaveInputProfileButtonProps,
   SaveImageProfileButtonProps,
 } from "@/utils/types/buttonType";
-import Link from "next/link";
-import { Button } from "flowbite-react";
 import { SpinnerLoader } from "@/components/Feed";
 
 const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
@@ -55,28 +60,38 @@ const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
 };
 
 const SortingButton: React.FC<SortingButtonProps> = ({
-  onSetToggle,
-  onHidden,
+  onSetClickInside,
+  onHiddenInside,
+  onHiddenOutside,
+  onTitleSort,
 }) => {
+  const handleClickInside = () => {
+    onSetClickInside(false);
+  };
+
   return (
     <>
       <button
-        className={`flex gap-x-2 items-center py-[10px] px-[14px] rounded-[50px]  border-solid border-2 ${
-          onHidden ? "border-[#CCCED2]" : "border-red-orange"
+        className={`flex gap-x-2 items-center py-[6px] px-[14px] rounded-[50px]  border-solid border-2 ${
+          onHiddenInside || onHiddenOutside
+            ? "border-red-orange"
+            : "border-[#CCCED2]"
         }`}
-        onClick={onSetToggle}
+        onClick={handleClickInside}
       >
         <p
           className={
-            onHidden
-              ? "font-[600] text-[#CCCED2]"
-              : "font-[600] text-red-orange"
+            onHiddenInside || onHiddenOutside
+              ? "font-[600] text-red-orange"
+              : "font-[600] text-[#CCCED2]"
           }
         >
-          By Tanggal
+          {onTitleSort ? onTitleSort : "Filter"}
         </p>
         <Image
-          src={onHidden ? ArrowUpGray : ArrowDownOrange}
+          src={
+            onHiddenInside || onHiddenOutside ? ArrowDownOrange : ArrowUpGray
+          }
           alt="Sort"
           width={500}
           height={500}
@@ -108,10 +123,13 @@ const TaskDropDownButton: React.FC<TaskDropDownButtonProps> = ({
   );
 };
 
-const AddSubTaskButton: React.FC = () => {
+const AddSubTaskButton: React.FC<{ onSetToggle?: any }> = ({ onSetToggle }) => {
   return (
     <>
-      <button className="flex items-center gap-x-2 border-solid border-2 border-[#CCCED2] py-[6px] px-[10px] rounded-[50px] ml-auto">
+      <button
+        className="flex items-center gap-x-2 border-solid border-2 border-[#CCCED2] py-[6px] px-[10px] rounded-[50px] ml-auto"
+        onClick={onSetToggle}
+      >
         <Image
           src={AddSubTaskIcon}
           alt="Add subtask"
@@ -125,16 +143,43 @@ const AddSubTaskButton: React.FC = () => {
   );
 };
 
-const DeleteSubTaskButton: React.FC = () => {
+const DeleteSubTaskButton: React.FC<{ onSubtaskId: number }> = ({
+  onSubtaskId,
+}) => {
+  const useAppDispatch: () => AppDispatch = useDispatch;
+  const dispatch = useAppDispatch();
+  const handleDeleteSubtask = () => {
+    const cbPending = () => {
+      console.info("Pending");
+    };
+
+    const cbFulfilled = () => {
+      console.info("Fulfilled");
+      dispatch(subtasksAction.resetDeleteSubtasks());
+    };
+
+    const cbFinally = () => {
+      window.location.reload();
+      console.info("Finally");
+    };
+
+    const id = onSubtaskId.toString();
+    dispatch(
+      subtasksAction.deleteSubtasksThunk({
+        id,
+        cbPending,
+        cbFulfilled,
+        cbFinally,
+      })
+    );
+  };
+
   return (
     <>
-      <button>
-        <Image
-          src={TrashIcon}
-          alt="Delete subtask"
-          width={500}
-          height={500}
-          className="w-[18px] h-[18px]"
+      <button onClick={handleDeleteSubtask}>
+        <Icon
+          icon="ic:outline-delete"
+          className="w-[18px] h-[18px] text-[#CCCED2] hover:text-red-orange"
         />
       </button>
     </>
@@ -192,15 +237,21 @@ const BackButton: React.FC<BackButtonProps> = ({ onRoute, title }) => {
   );
 };
 
-const ResetButton: React.FC<{title: any; onsetReset: any}> = ({title, onsetReset}) => {
+const ResetButton: React.FC<{ title: any; onsetReset: any }> = ({
+  title,
+  onsetReset,
+}) => {
   return (
     <>
-      <button className="bg-red-orange rounded-[60px] text-white hover:bg-red-orange-dark py-1 px-4 text-sm" onClick={onsetReset}>
+      <button
+        className="bg-red-orange rounded-[60px] text-white hover:bg-red-orange-dark py-1 px-4 text-sm"
+        onClick={onsetReset}
+      >
         {title}
       </button>
     </>
   );
-}
+};
 
 const RegulerButton: React.FC<RegulerButtonProps> = ({
   onSetAction,
