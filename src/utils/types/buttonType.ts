@@ -1,6 +1,8 @@
 export type SortingButtonProps = {
-  onSetToggle: any;
-  onHidden?: boolean;
+  onSetClickInside?: any;
+  onHiddenInside: boolean;
+  onHiddenOutside: boolean;
+  onTitleSort: string;
 };
 
 export type TaskDropDownButtonProps = {
