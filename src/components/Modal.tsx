@@ -411,7 +411,7 @@ export const NotificationModal: React.FC<{}> = () => {
           )}
           {!true &&
             new Array(8).fill(0).map((_: any, idx: any) => (
-              <li className="border-b border:gray-100 ">
+              <li className="border-b border:gray-100" key={idx}>
                 <a
                   href="#"
                   className="flex items-center justify-center w-full px-4 py-3 hover:bg-gray-50"
