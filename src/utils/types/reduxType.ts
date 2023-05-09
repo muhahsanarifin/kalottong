@@ -29,3 +29,8 @@ export type ArgSubTasksThunk = {
 export type ConfirmState = {
   [key: string]: any;
 };
+
+// Notification
+export type NotificationState = {
+  [key: string]: any;
+};
