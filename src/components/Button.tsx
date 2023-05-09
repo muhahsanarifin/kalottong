@@ -34,7 +34,7 @@ const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
   return (
     <>
       <button
-        className="flex bg-red-orange py-[12px] px-[15px] gap-x-2 rounded-[60px] hover:bg-red-orange-dark"
+        className="flex bg-red-orange py-[12px] px-[15px] gap-x-2 rounded-[60px] hover:bg-red-orange-dark md:text-xs md:py-4 md:items-center md:w-[10rem] md:justify-center"
         onClick={onSetToggle}
       >
         {init === "Tambah Tugas" && (
@@ -44,7 +44,7 @@ const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
               width={500}
               height={500}
               alt={init}
-              className="w-[1.5rem] h-[1.5rem]"
+              className="w-[1.5rem] h-[1.5rem] md:w-[1.2rem] md:h-[1.2rem]"
             />
             <p className="text-white border-solid">{init}</p>
           </>

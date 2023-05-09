@@ -23,7 +23,7 @@ export const Paginations: React.FC<{ [key: string]: any }> = ({
           onPageChange={onPageChange}
         />
       </div> */}
-      <div className="flex flex-col items-center w-fit ml-auto">
+      <div className="flex flex-col items-center w-fit ml-auto md:gap-y-1">
         {/* Help text */}
         <span className="text-[12px] text-gray-700">
           Showing <span className="font-semibold">{onPage}</span> to{" "}

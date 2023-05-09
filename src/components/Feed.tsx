@@ -82,12 +82,12 @@ export const WelcomeMessage: React.FC = () => {
       <div className="flex h-[100vh]">
         <div className="m-auto text-center">
           {hidden && (
-            <div className="grid h-full px-4 bg-white">
+            <div className="grid h-full px-4">
               <div className="text-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 1024 768"
-                  className="motion-safe:animate-bounce w-auto h-56 mx-auto text-black sm:h-64"
+                  className="motion-safe:animate-bounce w-auto h-56 mx-auto text-black md:h-48"
                 >
                   <g fill="none" fillRule="evenodd">
                     <g fill="#FF5678">
@@ -103,11 +103,11 @@ export const WelcomeMessage: React.FC = () => {
                   </g>
                 </svg>
 
-                <h1 className="mt-6 text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                <h1 className="mt-6 text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
                   Uh-oh!
                 </h1>
 
-                <p className="mt-4 text-gray-500">
+                <p className="mt-4 text-gray-500 md:text-sm">
                   We can&apos;t find the view content. Please, login!
                 </p>
               </div>
@@ -116,13 +116,13 @@ export const WelcomeMessage: React.FC = () => {
 
           {!hidden && (
             <div className={hidden && `${hidden}`}>
-              <h1 className="text-4xl font-extrabold sm:text-5xl">
+              <h1 className="text-4xl font-extrabold md:text-medium">
                 Welcome to Kalot
-                <strong className="font-extrabold text-red-orange sm:block">
+                <strong className="font-extrabold text-red-orange">
                   tong.
                 </strong>
               </h1>
-              <p className="mt-4 sm:text-xl sm:leading-relaxed">
+              <p className="mt-4 md:text-sm md:leading-relaxed">
                 Create task easily with{" "}
                 <span className="font-medium">kalo</span>
                 <span className="font-medium text-red-orange">ttong</span> .

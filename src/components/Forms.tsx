@@ -15,6 +15,7 @@ export const SortingDropDown: React.FC<SortingDropDownsProps> = ({
   onSetClickOutside,
   onHiddenInside,
   onSetClickInside,
+  onSetInitSort,
 }) => {
   const sortList = useRef(null);
 
@@ -55,6 +56,7 @@ export const SortingDropDown: React.FC<SortingDropDownsProps> = ({
 
   const handleSort = (e: any) => {
     onSetSort(e.target.value);
+    onSetInitSort(e.target.id);
   };
 
   return (
@@ -64,7 +66,7 @@ export const SortingDropDown: React.FC<SortingDropDownsProps> = ({
         className={
           onHiddenInside || onHiddenOutside
             ? "hidden"
-            : "border-solid border-2 border-[#CCCED2] bg-white absolute w-[300px] m-h-[144px] right-0 p-[1rem] rounded-[8px] flex flex-col gap-[1rem] mt-2 z-50"
+            : "border-solid border-2 border-[#CCCED2] bg-white absolute w-[300px] m-h-[144px] right-0 p-[1rem] rounded-[8px] flex flex-col gap-[1rem] mt-2 z-50 md:w-[200px]"
         }
       >
         {sorts.map((sort: any, idx: any) => (
@@ -76,7 +78,7 @@ export const SortingDropDown: React.FC<SortingDropDownsProps> = ({
                 </label>
                 <input
                   name="sort"
-                  id={sort?.value}
+                  id={sort?.name}
                   type="radio"
                   value={sort?.value}
                   className="w-[24px] h-[24px] text-red-orange bg-transparent border-gray-300 rounded-[100%] focus:ring-red-orange ml-auto"
@@ -156,7 +158,7 @@ export const RegisterForm: React.FC = () => {
   return (
     <>
       <form
-        className="flex flex-col gap-4 w-1/2"
+        className="flex flex-col gap-4 w-1/2 md:w-full"
         id="form"
         onSubmit={handleRegister}
       >

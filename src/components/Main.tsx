@@ -22,6 +22,7 @@ const Main = () => {
   const [hiddenAddTask, setHiddenAddTask] = useState(false);
   const [hiddenDoneTask, setHiddenDoneTask] = useState(false);
   const [accessToken, setAccessToken] = useState<any>(getCookie("token"));
+  const [initSort, setInitSort] = useState("")
   const [sort, setSort] = useState("");
   const [page, setPage] = useState<number>(1);
   const [status, setStatus] = useState("ongoing");
@@ -38,14 +39,14 @@ const Main = () => {
 
   return (
     <>
-      <main className="min-h-screen flex flex-col">
-        <div className="shadow-[0_16px_90px_rgba(19,7,52,0.08)] rounded-[12px] w-[80%] min-h-[42rem] m-auto p-[2.5rem]">
+      <main className="min-h-screen flex flex-col lg:py-5">
+        <div className="shadow-[0_16px_90px_rgba(19,7,52,0.08)] rounded-[12px] w-[80%] min-h-[42rem] m-auto p-[2.5rem] lg:w-full md:p-0">
           <div className="h-[100%] flex flex-col gap-y-2">
             {!accessToken ? (
               <WelcomeMessage />
             ) : (
               <>
-                <section className="flex items-center">
+                <section className="flex items-center md:pt-3 md:px-3">
                   <div className="flex flex-col">
                     <p className="text-red-orange font-medium text-[16px]">
                       MY TASK
@@ -53,7 +54,7 @@ const Main = () => {
                     <h1 className="text-[24px] font-medium text-cyan-blue">
                       To Do List
                     </h1>
-                    <p className="text-[#7A7F83] font-normal text-[16px]">
+                    <p className="text-[#7A7F83] font-normal text-[16px] md:text-[14px]">
                       Buat list tugas harian saya
                     </p>
                   </div>
@@ -69,7 +70,7 @@ const Main = () => {
                     )}
                   </div>
                 </section>
-                <section>
+                <section className="md:p-3">
                   <div className="flex items-center">
                     <p className="text-[#7A7F83] font-medium text-[16px]">
                       Sort By
@@ -79,7 +80,7 @@ const Main = () => {
                         onSetClickInside={setHiddenClickInside}
                         onHiddenInside={hiddenClickInside}
                         onHiddenOutside={hiddenClickOutside}
-                        onTitleSort={sort}
+                        onTitleSort={initSort}
                       />
                       <SortingDropDown
                         onHiddenInside={hiddenClickInside}
@@ -87,6 +88,7 @@ const Main = () => {
                         onSetSort={setSort}
                         onSetClickOutside={setHiddenClickOutside}
                         onSetClickInside={setHiddenClickInside}
+                        onSetInitSort={setInitSort}
                       />
                     </div>
                   </div>
@@ -111,13 +113,13 @@ const Main = () => {
                   </section>
                 )}
                 <section>
-                  <div className="p-2 flex flex-col gap-y-2">
+                  <div className="p-2 flex flex-col gap-y-2 md:p-3">
                     <OngoingTasks onSort={sort} onPage={page} />
                     {ongoingTasks?.totalPages === null ? null : (
                       <Paginations onSetPage={setPage} onPage={page} />
                     )}
                   </div>
-                  <div className="border-t-2 border-t-solid border-t-[#CCCED2] pt-2">
+                  <div className="border-t-2 border-t-solid border-t-[#CCCED2] pt-2 md:p-3">
                     <div className="flex items-center gap-x-2">
                       <DoneTaskButton
                         onSetToggle={() => setHiddenDoneTask(!hiddenDoneTask)}
@@ -133,7 +135,7 @@ const Main = () => {
                       </span>
                     </div>
                   </div>
-                  <div className={!hiddenDoneTask ? "hidden" : "p-2"}>
+                  <div className={!hiddenDoneTask ? "hidden" : "p-2 md:p-3"}>
                     <DoneTasks />
                   </div>
                 </section>

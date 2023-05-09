@@ -105,7 +105,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onShow, onSetClose }) => {
       >
         <Modal.Header />
         <Modal.Body>
-          <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
+          <div className="space-y-6 px-6 md:px-4 pb-4 md:pb-6 xl:pb-8">
             <h3 className="text-xl font-medium text-gray-900">
               Sign in to <span className="text-red-orange">kalottong</span>
             </h3>
@@ -387,6 +387,59 @@ export const OptionTaskModal: React.FC<{
             Delete task
           </button>
         </span>
+      </div>
+    </>
+  );
+};
+
+export const NotificationModal: React.FC<{}> = () => {
+  return (
+    <>
+      <div
+        className={`absolute max-w-sm bg-white border border-gray-100 top-10 md:-mr-[8rem] rounded-lg z-50 ${
+          !true && "overflow-y-scroll h-96"
+        }`}
+      >
+        <ul>
+          {true && (
+            <li className="flex items-center justify-center p-2">
+              <p className="text-[#7A7F83] text-xs">
+                {" "}
+                Does not exist notification
+              </p>
+            </li>
+          )}
+          {!true &&
+            new Array(8).fill(0).map((_: any, idx: any) => (
+              <li className="border-b border:gray-100 ">
+                <a
+                  href="#"
+                  className="flex items-center justify-center w-full px-4 py-3 hover:bg-gray-50"
+                >
+                  <div>
+                    <div className="border-2 border-red-orange-dark bg-red-orange rounded-full w-[32px] h-[32px]"></div>
+                  </div>
+                  <div className="w-[15rem] mx-2">
+                    {/* <p className="text-sm text-gray-900">
+                    Title
+                  </p> */}
+                    <div className="my-1">
+                      <div className="bg-red-orange rounded-full w-[32px] h-[10px]"></div>
+                    </div>
+                    {/* <p className="text-xs text-gray-500 font-bold ">
+                  created task
+                </p> */}
+                    <div className="my-1">
+                      <div className="bg-red-orange rounded-full w-[128px] h-[10px]"></div>
+                    </div>
+                    {/* <span className="text-xs text-blue-600">
+                    what time is it ?
+                  </span> */}
+                  </div>
+                </a>
+              </li>
+            ))}
+        </ul>
       </div>
     </>
   );

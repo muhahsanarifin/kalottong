@@ -8,18 +8,18 @@ import Footer from "@/components/Footer";
 const ResetPassword: NextPageWithLayout = () => {
   return (
     <>
-      <section className="w-[50%] mx-auto">
+      <section className="w-[50%] mx-auto md:w-full">
         <Breadcrumb page="Forgot Password" />
       </section>
       <main className="h-[90vh] flex flex-col justify-center gap-y-2">
         <h3 className=" text-[24px] font-[600] mx-auto">
           kalot<span className="text-red-orange">tong.</span>
         </h3>
-        <section className="w-[50%] mx-auto">
+        <section className="w-[50%] mx-auto  md:w-full">
           <ResetPasswordForm />
         </section>
       </main>
-      <section className="w-[50%] mx-auto">
+      <section className="w-[50%] mx-auto md:w-full">
         <Footer />
       </section>
     </>

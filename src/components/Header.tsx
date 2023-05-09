@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, use } from "react";
-import { useOnClickOutside } from "usehooks-ts";
+import { useOnClickOutside, useToggle } from "usehooks-ts";
 import Image from "next/image";
 import Link from "next/link";
 import { getCookie } from "cookies-next";
@@ -10,6 +10,7 @@ import type { RootState, AppDispatch } from "@/redux/store";
 
 import { AuthModal, LogoutModal } from "./Modal";
 import { HeaderProfileSkeletonLoader } from "./Feed";
+import { NotificationModal } from "./Modal";
 
 import KalottongLogo from "../assets/icons/kalottong.svg";
 import ActiveNotificationIcon from "../assets/icons/active-notification.png";
@@ -29,6 +30,7 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
   const [accessToken, setAccessToken] = useState<any>(getCookie("token"));
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [toggleNotification, toggel] = useToggle();
 
   useEffect(() => {
     dispatch(usersAction.retriveProfileThunk({}));
@@ -67,7 +69,7 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
           />
         </section>
         {/* Right header section */}
-        <section className="ml-auto flex gap-x-4">
+        <section className="flex-1 flex justify-end gap-x-2 items-center">
           {!accessToken ? (
             <button
               className="text-white bg-red-orange hover:bg-[#f3551c] text-sm rounded-lg font-medium px-5 py-2.5 focus:ring-2 focus:ring-offset-2 focus:ring-[#ffb291]"
@@ -77,24 +79,35 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
             </button>
           ) : (
             <>
-              <div className="flex items-center">
+              <div className="flex items-center relative flex-1 justify-end">
                 {!true ? (
-                  <Image
-                    src={ActiveNotificationIcon}
-                    width={500}
-                    height={500}
-                    alt="Active Notification"
-                    className="w-[1.2rem]"
-                  />
+                  <button
+                    onClick={toggel}
+                    className="hover:bg-[#CCCED2] p-2 rounded-[100%]"
+                  >
+                    <Image
+                      src={ActiveNotificationIcon}
+                      width={500}
+                      height={500}
+                      alt="Active Notification"
+                      className="w-[1.2rem]"
+                    />
+                  </button>
                 ) : (
-                  <Image
-                    src={OffNotificationIcon}
-                    width={500}
-                    height={500}
-                    alt="Off Notification"
-                    className="w-[1rem]"
-                  />
+                  <button
+                    onClick={toggel}
+                    className="hover:bg-[#CCCED2] p-2 rounded-[100%]"
+                  >
+                    <Image
+                      src={OffNotificationIcon}
+                      width={500}
+                      height={500}
+                      alt="Off Notification"
+                      className="w-[1rem]"
+                    />
+                  </button>
                 )}
+                {toggleNotification && <NotificationModal />}
               </div>
               <div className="relative">
                 {/* User avatar dropdown with name */}
