@@ -175,14 +175,14 @@ const Profile: NextPageWithLayout = () => {
   return (
     <>
       <Header onActive={"bg-gray-100 cursor-not-allowed"} />
-      <section className="flex w-[50%] mx-auto">
+      <section className="flex w-[50%] mx-auto md:w-full">
         <Breadcrumb page="Profile" />
       </section>
-      <main className="min-h-screen">
+      <main className="min-h-screen md:py-4">
         <div className="h-min flex flex-col m-auto gap-2 py-4 xs:py-0">
           <a
             href="#"
-            className="group relative block bg-white rounded-lg p-4 shadow-[0_16px_90px_rgba(19,7,52,0.08)] mx-auto w-[50%] h-full"
+            className="group relative block bg-white rounded-lg p-4 shadow-[0_16px_90px_rgba(19,7,52,0.08)] mx-auto w-[50%] h-full md:w-full"
           >
             {profileisLoading ? (
               <Icon
@@ -205,7 +205,7 @@ const Profile: NextPageWithLayout = () => {
             ) : (
               <Icon
                 icon="material-symbols:frame-person-rounded"
-                className="absolute inset-0 h-[50%] w-[50%] object-cover opacity-75 transition-opacity group-hover:opacity-50 text-gray-100 m-auto"
+                className="absolute inset-0 h-[50%] w-[50%] object-cover opacity-75 transition-opacity group-hover:opacity-50 text-gray-100 m-auto md:w-full"
               />
             )}
 
@@ -236,11 +236,11 @@ const Profile: NextPageWithLayout = () => {
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                           ></path>
                         </svg>
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                        <p className="mb-2 text-sm text-gray-500">
                           <span className="font-semibold">Click to upload</span>{" "}
                           or drag and drop
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-gray-500 md:text-[10px]">
                           JPEG, JPG, PNG or WEBP (MAX file size. 200kb)
                         </p>
                       </div>
@@ -257,14 +257,14 @@ const Profile: NextPageWithLayout = () => {
               </div>
             </div>
           </a>
-          <section className="mx-auto w-[50%]">
+          <section className="mx-auto w-[50%] md:w-full">
             <SaveImageProfileButton
               onSetAction={handleSaveImage}
               onDisable={!image}
               onLoading={loadingUpdateImage}
             />
           </section>
-          <fieldset className="bg-white rounded-lg shadow-[0_16px_90px_rgba(19,7,52,0.08)] mx-auto w-[50%] p-2 flex flex-col gap-y-2">
+          <fieldset className="bg-white rounded-lg shadow-[0_16px_90px_rgba(19,7,52,0.08)] mx-auto w-[50%] p-2 flex flex-col gap-y-2 md:w-full">
             <legend className="flex">
               <button onClick={() => setDisable(!disable)}>
                 <Icon

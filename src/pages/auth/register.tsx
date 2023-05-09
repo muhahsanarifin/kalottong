@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 const Register: NextPageWithLayout = () => {
   return (
     <>
-      <section className="flex w-[50%] mx-auto">
+      <section className="flex w-[50%] mx-auto md:w-full">
         <Breadcrumb page="Register" />
       </section>
       <section className="h-[90vh] flex flex-col items-center justify-center">
@@ -17,7 +17,7 @@ const Register: NextPageWithLayout = () => {
         </h3>
         <RegisterForm />
       </section>
-      <section className="w-[50%] mx-auto">
+      <section className="w-[50%] mx-auto md:w-full">
         <Footer />
       </section>
     </>
