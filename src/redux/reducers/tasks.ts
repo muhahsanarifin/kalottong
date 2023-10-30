@@ -1,15 +1,14 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { TasksState, ArgTasksThunk } from "@/utils/types/reduxType";
+import { TasksState } from "@/utils/types/reduxType";
 import {
-  retriveOngoingTasks,
-  retriveDoneTasks,
-  createTasks,
-  editTasks,
-  editStatusTasks,
-  deleteTasks,
-} from "@/utils/api/tasks";
-import { getCookie } from "cookies-next";
+  retriveOngoingTasksThunk,
+  retriveDoneTasksThunk,
+  createTasksThunk,
+  editTasksThunk,
+  editStatusTasksThunk,
+  deleteTasksThunk,
+} from "../actions/tasks";
 
 const initialState: TasksState = {
   retriveOngoingTasks: {
@@ -69,142 +68,6 @@ const initialState: TasksState = {
     err: null,
   },
 };
-
-const retriveOngoingTasksThunk = createAsyncThunk(
-  "tasks/ongoing",
-  async ({ params, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
-    try {
-      typeof cbPending === "function" && cbPending();
-      const response = await retriveOngoingTasks(getCookie("token"), params);
-      typeof cbFulfilled === "function" && cbFulfilled();
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        console.error(error.response.data?.msg);
-        throw error.response.data?.msg;
-      } else {
-        console.error(error);
-        throw error;
-      }
-    } finally {
-      typeof cbFinally === "function" && cbFinally();
-    }
-  }
-);
-
-const retriveDoneTasksThunk = createAsyncThunk(
-  "tasks/done",
-  async ({ params, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
-    try {
-      typeof cbPending === "function" && cbPending();
-      const response = await retriveDoneTasks(getCookie("token"), params);
-      // console.log("Response retrive data donetaks:", response);
-      typeof cbFulfilled === "function" && cbFulfilled();
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        console.error(error.response.data?.msg);
-        throw error.response.data?.msg;
-      } else {
-        console.error(error);
-        throw error;
-      }
-    } finally {
-      typeof cbFinally === "function" && cbFinally();
-    }
-  }
-);
-
-const createTasksThunk = createAsyncThunk(
-  "tasks/create",
-  async ({ body, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
-    try {
-      typeof cbPending === "function" && cbPending();
-      const response = await createTasks(getCookie("token"), body);
-      // console.log("Response create taks:", response);
-      typeof cbFulfilled === "function" && cbFulfilled();
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        console.error(error.response.data?.msg);
-        throw error.response.data?.msg;
-      } else {
-        console.error(error);
-        throw error;
-      }
-    } finally {
-      typeof cbFinally === "function" && cbFinally();
-    }
-  }
-);
-
-const editTasksThunk = createAsyncThunk(
-  "tasks/edit",
-  async ({ body, id, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
-    try {
-      typeof cbPending === "function" && cbPending();
-      const response = await editTasks(getCookie("token"), body, id);
-      // console.log("Response edit task:", response.data);
-      typeof cbFulfilled === "function" && cbFulfilled();
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        console.error(error.response.data?.msg);
-        throw error.response.data?.msg;
-      } else {
-        console.error(error);
-        throw error;
-      }
-    } finally {
-      typeof cbFinally === "function" && cbFinally();
-    }
-  }
-);
-
-const editStatusTasksThunk = createAsyncThunk(
-  "tasks/status/edit",
-  async ({ body, id, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
-    try {
-      typeof cbPending === "function" && cbPending();
-      const response = await editStatusTasks(getCookie("token"), body, id);
-      // console.log("Response edit task:", response.data);
-      typeof cbFulfilled === "function" && cbFulfilled();
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        console.error(error.response.data?.msg);
-        throw error.response.data?.msg;
-      } else {
-        console.error(error);
-        throw error;
-      }
-    } finally {
-      typeof cbFinally === "function" && cbFinally();
-    }
-  }
-);
-
-const deleteTasksThunk = createAsyncThunk(
-  "tasks/delete",
-  async ({ id, cbPending, cbFulfilled, cbFinally }: ArgTasksThunk) => {
-    try {
-      typeof cbPending === "function" && cbPending();
-      const response = await deleteTasks(getCookie("token"), id);
-      // console.log("Response delete task:", response.data);
-      typeof cbFulfilled === "function" && cbFulfilled();
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        console.error(error.response.data?.msg);
-        throw error.response.data?.msg;
-      }
-      console.error(error);
-      throw error;
-    } finally {
-      typeof cbFinally === "function" && cbFinally();
-    }
-  }
-);
 
 const tasksSlice = createSlice({
   name: "tasks",
@@ -302,6 +165,11 @@ const tasksSlice = createSlice({
           isFulfilled: false,
           isRejected: true,
           data: {
+            totalData: null,
+            next: null,
+            previous: null,
+            totalPages: null,
+            data: [],
             msg: action.error.message,
           },
           err: action.error.message,
@@ -350,6 +218,11 @@ const tasksSlice = createSlice({
           isFulfilled: false,
           isRejected: true,
           data: {
+            totalData: null,
+            next: null,
+            previous: null,
+            totalPages: null,
+            data: [],
             msg: action.error.message,
           },
           err: action.error.message,

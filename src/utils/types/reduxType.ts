@@ -34,3 +34,8 @@ export type ConfirmState = {
 export type NotificationState = {
   [key: string]: any;
 };
+
+// Fiturs
+export type FitursState = {
+  [key: string]: any;
+};

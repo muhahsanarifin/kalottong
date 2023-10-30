@@ -1,4 +1,4 @@
 export type AuthModalProps = {
   onShow: boolean;
-  onSetClose: any;
+  setClose: any;
 };

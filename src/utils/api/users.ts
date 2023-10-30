@@ -20,18 +20,18 @@ const anotherConfig = (accessToken: any) => {
   };
 };
 
-export const retriveProfile = (accessToken: any) =>
+export const retriveProfile = (accessToken: string) =>
   Axios.get(`${BASE_URL}/users/profile`, config(accessToken));
 
-export const editProfile = (accessToken: any, body: BodyArg) =>
+export const editProfile = (accessToken: string, body: BodyArg) =>
   Axios.patch(`${BASE_URL}/users/profile/edit`, body, config(accessToken));
 
-export const uploadImageProfile = (accessToken: any, body: BodyArg) =>
+export const uploadImageProfile = (accessToken: string, body: BodyArg) =>
   Axios.patch(
     `${BASE_URL}/users/profile/upload`,
     body,
     anotherConfig(accessToken)
   );
 
-export const editNoTelp = (accessToken: any, body: BodyArg) =>
+export const editNoTelp = (accessToken: string, body: BodyArg) =>
   Axios.patch(`${BASE_URL}/users/notelp/edit`, body, config(accessToken));

@@ -1,9 +1,9 @@
 import Axios from "axios";
-import { BodyArg, ParamsArg, IdTasksArg } from "../types/apiType";
+import { BodyArg } from "../types/apiType";
 
 const BASE_URL = process.env.NEXT_PUBLIC_KALOTTONG_BACK_END;
 
-const config = (accessToken: any) => {
+const config = (accessToken: string) => {
   return {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -11,23 +11,23 @@ const config = (accessToken: any) => {
   };
 };
 
-export const retriveOngoingTasks = (accessToken: any, params: ParamsArg) =>
+export const retriveOngoingTasks = (accessToken: string, params: string) =>
   Axios.get(`${BASE_URL}/tasks${params}`, config(accessToken));
 
-export const retriveDoneTasks = (accessToken: any, params: ParamsArg) =>
+export const retriveDoneTasks = (accessToken: string, params: string) =>
   Axios.get(`${BASE_URL}/tasks${params}`, config(accessToken));
 
-export const createTasks = (accessToken: any, body: any) =>
+export const createTasks = (accessToken: string, body: any) =>
   Axios.post(`${BASE_URL}/tasks/create`, body, config(accessToken));
 
-export const editTasks = (accessToken: any, body: BodyArg, id: IdTasksArg) =>
+export const editTasks = (accessToken: string, body: BodyArg, id: string | number) =>
   Axios.patch(`${BASE_URL}/tasks/edit/${id}`, body, config(accessToken));
 
 export const editStatusTasks = (
-  accesstoken: any,
+  accesstoken: string,
   body: BodyArg,
-  id: IdTasksArg
+  id: string | number
 ) => Axios.patch(`${BASE_URL}/tasks/edit/${id}`, body, config(accesstoken));
 
-export const deleteTasks = (accessToken: any, id: IdTasksArg) =>
+export const deleteTasks = (accessToken: string, id: string | number) =>
   Axios.delete(`${BASE_URL}/tasks/delete/${id}`, config(accessToken));

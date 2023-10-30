@@ -12,7 +12,7 @@
   <p align="center">
     <a href="https://kalottong.vercel.app/">View Demo</a>
     ·
-    <a href="https://drive.google.com/drive/folders/1ok97XR1diZpN_yH1DpT79r9Fm00s3gvo?usp=share_link">VIew Features</a>
+    <a href="https://drive.google.com/drive/folders/1ok97XR1diZpN_yH1DpT79r9Fm00s3gvo?usp=share_link">View Features</a>
   </p>
 </div>
 
@@ -36,15 +36,6 @@
 git clone https://github.com/muhahsanarifin/kalottong.git
 ```
 
-## Demo
-
-» Demo account
-
-```sh
-Email: anakbodoh@gmail.com
-Password: anakbodoh
-```
-
 <!-- CONTRIBUTING -->
 
 # Contributing
@@ -59,4 +50,4 @@ Password: anakbodoh
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<p align="center"> <samp><i>&copy; 2022-2023 kalottong</i></samp> </p>
+<p align="center"> <samp><i>&copy; 2022 kalottong</i></samp> </p>

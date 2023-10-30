@@ -9,7 +9,7 @@ const initialState: ConfirmState = {
   taskDataToRename: { data: null, isFulfilled: false },
 };
 
-// Create Action with createAction() function
+// "Create Action with createAction() function."
 // const addDataToRename = createAction(
 //   "confirm/task/rename",
 //   function prepare(body: any) {
@@ -19,7 +19,7 @@ const initialState: ConfirmState = {
 //   }
 // );
 
-// Create reducer with createReducer() function, It can use with createAction() if developer does not use createSlice().
+// "Create reducer with createReducer() function, It can use with createAction() if developer does not use createSlice()."
 // export const confirmReducer = createReducer(
 //   initialState.taskDataToRename,
 //   (builder) => {
@@ -52,7 +52,7 @@ export const confirmSlice = createSlice({
         ...prevState,
         taskDataToRename: { data: null, isFulfilled: false },
       };
-    }
+    },
   },
 });
 

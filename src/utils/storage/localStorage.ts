@@ -1,11 +1,11 @@
-export const setItemLocalStorage = (key: string, value: any) => {
+export const set = (key: string, value: any) => {
   localStorage.setItem(key, value);
 };
 
-export const getItemLocalStorage = (key: string) => {
+export const get = (key: string) => {
   return localStorage.getItem(key);
 };
 
-export const removeItemLocalStorage = (key: string) => {
-  localStorage.removeItem(key);
+export const remove = (key: string) => {
+  return localStorage.removeItem(key);
 };

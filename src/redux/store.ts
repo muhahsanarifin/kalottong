@@ -14,8 +14,8 @@ const persistedReducer = persistReducer(persistConfig, rooReducer);
 const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
-  // .concat(logger),
+    getDefaultMiddleware({ serializableCheck: false })
+    // .concat(logger),
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -1,24 +1,25 @@
 export type SortingButtonProps = {
-  onSetClickInside?: any;
-  onHiddenInside: boolean;
-  onHiddenOutside: boolean;
+  setClickInside?: any;
+  hiddenInside: boolean;
+  hiddenOutside: boolean;
   onTitleSort: string;
 };
 
 export type TaskDropDownButtonProps = {
-  onSetToggle: any;
-  onSetFocus?: any;
+  setToggle: any;
+  setFocus?: any;
   onFocus?: any;
   onHidden?: boolean;
 };
 
 export type AddTaskDropDownButtonProps = {
-  onSetToggle?: any;
-  init: string;
+  setToggle?: () => void;
+  init?: string;
+  disabled?: boolean;
 };
 
 export type DoneTaskButtonProps = {
-  onSetToggle: any;
+  setToggle: any;
   onHidden?: boolean;
 };
 
@@ -28,19 +29,19 @@ export type BackButtonProps = {
 };
 
 export type RegulerButtonProps = {
-  onSetAction?: any;
+  setAction?: any;
   title: string;
   onDisable?: boolean;
 };
 
 export type SaveInputProfileButtonProps = {
-  onSetAction?: any;
+  setAction?: any;
   onDisable: any;
   onLoading?: boolean;
 };
 
 export type SaveImageProfileButtonProps = {
-  onSetAction: any;
+  setAction: any;
   onDisable?: boolean;
   onLoading?: boolean;
 };
