@@ -1,39 +1,50 @@
-import React, { useState, useRef, useEffect, use } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useOnClickOutside, useToggle } from "usehooks-ts";
+import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
-import { getCookie } from "cookies-next";
+import cookie from "@/utils/storage/cookies";
 import { useSelector, useDispatch } from "react-redux";
 
 import { usersAction } from "../redux/reducers/users";
+import { fiturAction } from "@/redux/reducers/fitur";
 import type { RootState, AppDispatch } from "@/redux/store";
 
-import { AuthModal, LogoutModal } from "./Modal";
-import { HeaderProfileSkeletonLoader } from "./Feed";
-import { NotificationModal } from "./Modal";
-
-import KalottongLogo from "../assets/icons/kalottong.svg";
-import ActiveNotificationIcon from "../assets/icons/active-notification.png";
-import OffNotificationIcon from "../assets/icons/off-notification.png";
+import { AuthModal, LogoutModal, NotificationModal } from "./Modal";
+import { HeaderProfileSkeletonLoader, Info } from "./Feed";
+import {
+  KalottongLogo,
+  ActiveNotificationIcon,
+  OffNotificationIcon,
+} from "../utils/assest";
 
 const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
   const useAppDispatch: () => AppDispatch = useDispatch;
   const dispatch = useAppDispatch();
-  const profile = useSelector(
-    (state: RootState) => state.user.retriveProfile.data
+  const retriveProfile = useSelector(
+    (state: RootState) => state.user.retriveProfile
   );
-  const profileLoading = useSelector(
-    (state: RootState) => state.user.retriveProfile?.isLoading
-  );
+
+  const info = useSelector((state: RootState) => state.fitur.info);
+
   const [hiddenClickOutside, setHiddenClickOutside] = useState<boolean>(true);
   const [hiddenClickInside, setHiddenClickInside] = useState<boolean>(true);
   const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
-  const [accessToken, setAccessToken] = useState<any>(getCookie("token"));
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [toggleNotification, toggel] = useToggle();
+  const profile = {
+    image: retriveProfile.data?.image,
+    firstname: retriveProfile.data?.firstname,
+    lastname: retriveProfile.data?.lastname,
+    notelp: retriveProfile.data?.notelp,
+  };
 
   useEffect(() => {
-    dispatch(usersAction.retriveProfileThunk({}));
+    dispatch(
+      usersAction.retriveProfileThunk({
+        accessToken: cookie.get({ key: "token" }),
+      })
+    );
   }, [dispatch]);
 
   const handleClickInside = () => {
@@ -52,10 +63,14 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
       {/* Modal */}
       <AuthModal
         onShow={showAuthModal}
-        onSetClose={() => setShowAuthModal(false)}
+        setClose={() => setShowAuthModal(false)}
       />
       {showLogoutModal && (
-        <LogoutModal onSetShow={() => setShowLogoutModal(!showLogoutModal)} />
+        <LogoutModal
+          setShow={() => setShowLogoutModal(!showLogoutModal)}
+          setCloseShowLogoutModal={setShowLogoutModal}
+          closeShowLogoutModal={showLogoutModal}
+        />
       )}
       <header className="flex items-center">
         {/* Left header section */}
@@ -70,14 +85,7 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
         </section>
         {/* Right header section */}
         <section className="flex-1 flex justify-end gap-x-2 items-center">
-          {!accessToken ? (
-            <button
-              className="text-white bg-red-orange hover:bg-[#f3551c] text-sm rounded-lg font-medium px-5 py-2.5 focus:ring-2 focus:ring-offset-2 focus:ring-[#ffb291]"
-              onClick={() => setShowAuthModal(true)}
-            >
-              Login
-            </button>
-          ) : (
+          {cookie.get({ key: "token" }) ? (
             <>
               <div className="flex items-center relative flex-1 justify-end">
                 {!true ? (
@@ -115,28 +123,32 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
                   <button
                     className={
                       hiddenClickInside || hiddenClickOutside
-                        ? "flex items-center text-sm font-medium gap-x-2 rounded-full z-40"
-                        : "flex items-center text-sm font-medium gap-x-2 focus:ring-2 focus:ring-offset-2 focus:ring-[#ffb291] rounded-full z-40"
+                        ? "flex items-center text-sm font-medium gap-x-2 rounded-full z-40 min-w-[172px] sm:min-w-0"
+                        : "flex items-center text-sm font-medium gap-x-2 focus:ring-2 focus:ring-offset-2 focus:ring-red-orange rounded-full z-40 min-w-[172px] sm:min-w-0"
                     }
                     onClick={handleClickInside}
                   >
-                    {profileLoading ? (
+                    {retriveProfile?.isLoading ||
+                    !retriveProfile?.data?.image ? (
                       <HeaderProfileSkeletonLoader />
                     ) : (
                       <>
                         <Image
-                          src={`${process.env.NEXT_PUBLIC_IMAGE_CLOUDNIARY}/${profile?.image}`}
+                          src={`${process.env.NEXT_PUBLIC_IMAGE_CLOUDNIARY}/${retriveProfile?.data?.image}`}
                           alt="user photo"
                           className="w-[2rem] h-[2rem] rounded-[100%]"
                           width={500}
                           height={500}
                           loading="lazy"
                         />
-                        {profile?.lastname}
+                        <p className="flex-1 sm:hidden font-semibold">
+                          {retriveProfile?.data?.firstname}{" "}
+                          {retriveProfile?.data?.lastname}
+                        </p>
                       </>
                     )}
                     <svg
-                      className="w-4 h-4 mx-1.5"
+                      className="w-4 h-4 ml-auto sm:hidden"
                       aria-hidden="true"
                       fill="currentColor"
                       viewBox="0 0 20 20"
@@ -160,10 +172,9 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
                   }
                 >
                   <div className="px-4 py-3 text-sm text-gray-900">
-                    <div className="font-medium ">
-                      {profile?.firstname} {profile?.lastname}
+                    <div className="truncate font-semibold">
+                      {retriveProfile?.data?.email}
                     </div>
-                    <div className="truncate">{profile?.email}</div>
                   </div>
                   <ul className="py-2 text-sm text-gray-700">
                     <li>
@@ -172,13 +183,11 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
                           href="/users/profile"
                           className="block px-4 py-2 hover:bg-gray-100"
                         >
-                          Settings
+                          Profile
                         </Link>
                       )}
                       {onActive && (
-                        <p className={`${onActive} block px-4 py-2`}>
-                          Settings
-                        </p>
+                        <p className={`${onActive} block px-4 py-2`}>Profile</p>
                       )}
                     </li>
                   </ul>
@@ -193,9 +202,36 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
                 </div>
               </div>
             </>
+          ) : (
+            <button
+              className="flex"
+              onClick={() => setShowAuthModal(true)}
+            >
+              <Icon
+                icon="pepicons-pop:enter-circle"
+                color="#f3551c"
+                width="28"
+                height="28"
+              />
+            </button>
           )}
         </section>
       </header>
+      {cookie.get({ key: "token" }) && (
+        <>
+          {Object.values(profile).includes(null) ? (
+            <>
+              {info?.isShow && (
+                <Info
+                  color={"info"}
+                  setClose={() => dispatch(fiturAction.info(false))}
+                  init={"Silakan, lengkapi profile anda terlebih dahulu."}
+                />
+              )}
+            </>
+          ) : null}
+        </>
+      )}
     </>
   );
 };

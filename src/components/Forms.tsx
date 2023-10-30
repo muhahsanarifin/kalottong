@@ -1,34 +1,49 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import Link from "next/link";
-import { setCookie } from "cookies-next";
-import { register, login } from "@/utils/api/auth";
-import { Button, Label, TextInput, Checkbox, Radio } from "flowbite-react";
-import { SortingDropDownsProps } from "@/utils/types/formType";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import cookie from "@/utils/storage/cookies";
 
+import { AppDispatch } from "../redux/store";
+import { taskAction } from "../redux/reducers/tasks";
+import { register, login } from "../utils/api/auth";
+import { SortingDropDownsProps } from "../utils/types/formType";
+import {
+  customeCheckboxTheme,
+  customeInputTextTheme,
+  customeRadioTheme,
+} from "../utils/custome/input";
+import { customeRegisterButtonTheme } from "@/utils/custome/button";
+
+import { Button, Label, TextInput, Checkbox, Radio } from "flowbite-react";
 import { RegulerButton } from "./Button";
 import { SpinnerLoader, ErrorMessage } from "./Feed";
 
 export const SortingDropDown: React.FC<SortingDropDownsProps> = ({
-  onSetSort,
-  onHiddenOutside,
-  onSetClickOutside,
-  onHiddenInside,
-  onSetClickInside,
-  onSetInitSort,
+  setSort,
+  hiddenOutside,
+  setClickOutside,
+  hiddenInside,
+  setClickInside,
+  limit,
+  sort,
+  page,
+  status,
 }) => {
+  const useAppDispatch: () => AppDispatch = useDispatch;
+  const dispatch = useAppDispatch();
   const sortList = useRef(null);
-
   const handleClickOutside = () => {
-    onSetClickInside(true);
-    onSetClickOutside(!onHiddenOutside);
+    setClickInside(true);
+    setClickOutside(!hiddenOutside);
   };
 
   useOnClickOutside(sortList, handleClickOutside);
 
   const sorts = [
     {
-      id: 0,
+      id: 1,
       name: "Terbaru",
       value: "new",
     },
@@ -54,9 +69,24 @@ export const SortingDropDown: React.FC<SortingDropDownsProps> = ({
     },
   ];
 
-  const handleSort = (e: any) => {
-    onSetSort(e.target.value);
-    onSetInitSort(e.target.id);
+  const handleSort = (sort: any, el: any) => {
+    setSort(sort);
+    el.target.value = sort.value;
+  };
+
+  const handleResetTask = async () => {
+    dispatch(
+      taskAction.retriveOngoingTasksThunk({
+        params: `?status=${status}&sort=&limit=${limit}&page=${page}`,
+        accessToken: cookie.get({ key: "token" }),
+      })
+    );
+
+    setSort({
+      id: null,
+      name: "",
+      value: "",
+    });
   };
 
   return (
@@ -64,25 +94,46 @@ export const SortingDropDown: React.FC<SortingDropDownsProps> = ({
       <ul
         ref={sortList}
         className={
-          onHiddenInside || onHiddenOutside
+          hiddenInside || hiddenOutside
             ? "hidden"
             : "border-solid border-2 border-[#CCCED2] bg-white absolute w-[300px] m-h-[144px] right-0 p-[1rem] rounded-[8px] flex flex-col gap-[1rem] mt-2 z-50 md:w-[200px]"
         }
       >
-        {sorts.map((sort: any, idx: any) => (
+        {sort.value && (
+          <li className="w-full">
+            <div className="flex justify-end">
+              <label
+                htmlFor="reset"
+                className="bg-red-orange rounded-[60px] text-white hover:bg-red-orange-dark py-1 px-4 text-sm"
+              >
+                Reset
+              </label>
+              <input
+                name="sort"
+                type="radio"
+                id="reset"
+                className="hidden"
+                onClick={handleResetTask}
+              />
+            </div>
+          </li>
+        )}
+        {sorts.map((sort: any) => (
           <>
-            <li className="w-full">
+            <li className="w-full" key={sort.id}>
               <div className="flex items-center">
-                <label htmlFor="terbaru" className="text-cyan-blue font-[400]">
+                <label
+                  htmlFor={sort.name}
+                  className="text-cyan-blue font-[400]"
+                >
                   {sort?.name}
                 </label>
                 <input
                   name="sort"
-                  id={sort?.name}
+                  id={sort.name}
                   type="radio"
-                  value={sort?.value}
                   className="w-[24px] h-[24px] text-red-orange bg-transparent border-gray-300 rounded-[100%] focus:ring-red-orange ml-auto"
-                  onClick={(e) => handleSort(e)}
+                  onClick={(el) => handleSort({ ...sort }, el)}
                 />
               </div>
             </li>
@@ -94,9 +145,17 @@ export const SortingDropDown: React.FC<SortingDropDownsProps> = ({
 };
 
 export const RegisterForm: React.FC = () => {
+  interface statusInitState {
+    login: number | null;
+  }
+
+  const router = useRouter();
   const [agree, setAgree] = useState<boolean>(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [errorResponse, setErrorResponse] = useState<any>("");
+  const [status, setStatus] = useState<statusInitState>({
+    login: null,
+  });
 
   const [body, setBody] = useState({
     email: "",
@@ -105,41 +164,36 @@ export const RegisterForm: React.FC = () => {
     gender_id: "",
   });
 
+  const handleInput = (e: any) => {
+    setBody({ ...body, [e.target.name]: e.target.value });
+  };
+
   const handleRegister = async (e: any) => {
     e.preventDefault();
 
     try {
       setLoader(true);
-      const registerResponse = await register({
-        email: body.email,
-        password: body.password,
-        confirmPassword: body.confirmPassword,
-        gender_id: body.gender_id,
-      });
+      const registerResponse = await register(body);
 
       setErrorResponse(false);
 
       if (registerResponse.status === 201) {
         const loginResponse = await login({
-          email: registerResponse.data.data[0].email,
-          password: body.password,
+          email: body?.email,
+          password: body?.password,
         });
 
-        // setCookie("data-user", JSON.stringify(loginResponse.data.data));
-        setCookie("token", loginResponse.data.data?.token);
+        cookie.set({ key: "token", value: loginResponse.data.data?.token });
 
-        window.location.replace("/home");
+        setStatus({
+          login: loginResponse?.status,
+        });
       }
     } catch (error: any) {
-      console.error(error.response.data.msg);
-      setErrorResponse(error.response.data.msg);
+      setErrorResponse(error.response.data);
     } finally {
       setLoader(false);
     }
-  };
-
-  const handleInput = (e: any) => {
-    setBody({ ...body, [e.target.name]: e.target.value });
   };
 
   const toClear = () => {
@@ -155,6 +209,10 @@ export const RegisterForm: React.FC = () => {
     (document.querySelector("#form") as HTMLFormElement).reset();
   };
 
+  useEffect(() => {
+    if (status.login) router.replace("/home");
+  }, [status.login, router]);
+
   return (
     <>
       <form
@@ -167,6 +225,7 @@ export const RegisterForm: React.FC = () => {
             <Label htmlFor="email" value="Your email" />
           </div>
           <TextInput
+            theme={customeInputTextTheme}
             name="email"
             id="email"
             type="email"
@@ -183,6 +242,7 @@ export const RegisterForm: React.FC = () => {
             <Label htmlFor="password" value="Your password" />
           </div>
           <TextInput
+            theme={customeInputTextTheme}
             name="password"
             id="password"
             type="password"
@@ -198,6 +258,7 @@ export const RegisterForm: React.FC = () => {
             <Label htmlFor="repeat-password" value="Repeat password" />
           </div>
           <TextInput
+            theme={customeInputTextTheme}
             name="confirmPassword"
             id="confirmPassword"
             type="password"
@@ -218,6 +279,7 @@ export const RegisterForm: React.FC = () => {
             </legend>
             <div className="flex items-center gap-2">
               <Radio
+                theme={customeRadioTheme}
                 id="man"
                 name="gender_id"
                 value={1}
@@ -227,6 +289,7 @@ export const RegisterForm: React.FC = () => {
             </div>
             <div className="flex items-center gap-2">
               <Radio
+                theme={customeRadioTheme}
                 id="women"
                 name="gender_id"
                 value={2}
@@ -237,7 +300,11 @@ export const RegisterForm: React.FC = () => {
           </fieldset>
         </div>
         <div className="flex items-center gap-2">
-          <Checkbox id="agree" onChange={(e) => setAgree(e.target.checked)} />
+          <Checkbox
+            theme={customeCheckboxTheme}
+            id="agree"
+            onChange={(e) => setAgree(e.target.checked)}
+          />
           <Label htmlFor="agree">
             I agree with the {""}
             <Link href="#" className="text-red-orange hover:underline">
@@ -246,23 +313,27 @@ export const RegisterForm: React.FC = () => {
           </Label>
         </div>
         <Button
+          theme={customeRegisterButtonTheme}
           className={`${
             !body.email &&
             !body.password &&
             !body.confirmPassword &&
             !body.gender_id &&
-            !agree
-              ? "hidden"
-              : "bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:ring-red-orange-light h-[41.6px] rounded-[8px] text-white text-[14px]"
+            !agree &&
+            "hidden"
           }`}
           onClick={toClear}
+          color="redOrange"
         >
           Clear
         </Button>
         <Button
+          theme={customeRegisterButtonTheme}
           type="submit"
-          className="bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:ring-red-orange-light"
           disabled={Object.values(body).includes("") || !agree || loader}
+          color={
+            Object.values(body).includes("") ? "redOrange" : "redOrangeDark"
+          }
         >
           {loader ? (
             <SpinnerLoader onClassName={"fill-red-orange"} />
@@ -307,7 +378,7 @@ export const ResetPasswordForm: React.FC = () => {
         />
         <RegulerButton
           title="Submit"
-          onSetAction={() => console.log("Reset password test.")}
+          setAction={() => console.log("Reset password test.!")}
           onDisable={!email}
         />
       </div>

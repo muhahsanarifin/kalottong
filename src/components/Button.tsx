@@ -1,20 +1,23 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { Button } from "flowbite-react";
 
 import { subtasksAction } from "@/redux/reducers/subtasks";
-import { AppDispatch } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 
-import AddTaskIcon from "../assets/icons/plus.png";
-import AddSubTaskIcon from "../assets/icons/plus-red-orange.png";
-import ArrowDownOrange from "../assets/icons/arrow-down-2-red-orange.png";
-import ArrowDown from "../assets/icons/arrow-down-2.png";
-import ArrowUpGray from "../assets/icons/arrow-up-2-gray.png";
-import ArrowRight from "../assets/icons/arrow-right-2.png";
-import MoreIcon from "../assets/icons/more-vertical.png";
+import {
+  AddTaskIcon,
+  AddSubTaskIcon,
+  ArrowDownOrange,
+  ArrowDown,
+  ArrowUpGray,
+  ArrowRight,
+  MoreIcon,
+} from "../utils/assest";
+
 import {
   SortingButtonProps,
   TaskDropDownButtonProps,
@@ -26,16 +29,21 @@ import {
   SaveImageProfileButtonProps,
 } from "@/utils/types/buttonType";
 import { SpinnerLoader } from "@/components/Feed";
+import cookie from "@/utils/storage/cookies";
 
 const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
-  onSetToggle,
+  setToggle,
   init,
+  disabled,
 }) => {
   return (
     <>
       <button
-        className="flex bg-red-orange py-[12px] px-[15px] gap-x-2 rounded-[60px] hover:bg-red-orange-dark md:text-xs md:py-4 md:items-center md:w-[10rem] md:justify-center"
-        onClick={onSetToggle}
+        className={`flex bg-red-orange py-[12px] px-[15px] gap-x-2 rounded-[60px] hover:bg-red-orange-dark md:text-xs md:py-4 md:items-center md:w-[10rem] md:justify-center sm:w-fit ${
+          disabled && "cursor-not-allowed opacity-75"
+        }`}
+        onClick={setToggle}
+        disabled={disabled}
       >
         {init === "Tambah Tugas" && (
           <>
@@ -46,12 +54,12 @@ const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
               alt={init}
               className="w-[1.5rem] h-[1.5rem] md:w-[1.2rem] md:h-[1.2rem]"
             />
-            <p className="text-white border-solid">{init}</p>
+            <p className="text-white border-solid sm:hidden">{init}</p>
           </>
         )}
         {init === "Rename Task" && (
           <>
-            <p className="text-white border-solid">{init}</p>
+            <p className="text-white border-solid sm:hidden">{init}</p>
           </>
         )}
       </button>
@@ -60,38 +68,43 @@ const AddTaskButton: React.FC<AddTaskDropDownButtonProps> = ({
 };
 
 const SortingButton: React.FC<SortingButtonProps> = ({
-  onSetClickInside,
-  onHiddenInside,
-  onHiddenOutside,
+  setClickInside,
+  hiddenInside,
+  hiddenOutside,
   onTitleSort,
 }) => {
   const handleClickInside = () => {
-    onSetClickInside(false);
+    setClickInside(false);
   };
+  const retriveOngoingTasks = useSelector(
+    (state: RootState) => state.tasks.retriveOngoingTasks
+  );
 
   return (
     <>
       <button
-        className={`flex gap-x-2 items-center py-[6px] px-[14px] rounded-[50px]  border-solid border-2 ${
-          onHiddenInside || onHiddenOutside
+        className={`flex gap-x-2 items-center py-[6px] px-[14px] rounded-[50px] border-solid border-2 ${
+          hiddenInside || hiddenOutside
             ? "border-red-orange"
             : "border-[#CCCED2]"
+        } ${
+          !retriveOngoingTasks.data.data?.length &&
+          "cursor-not-allowed opacity-75"
         }`}
         onClick={handleClickInside}
+        disabled={!retriveOngoingTasks.data.data?.length}
       >
         <p
           className={
-            onHiddenInside || onHiddenOutside
+            hiddenInside || hiddenOutside
               ? "font-[600] text-red-orange"
               : "font-[600] text-[#CCCED2]"
           }
         >
-          {onTitleSort ? onTitleSort : "Filter"}
+          {onTitleSort}
         </p>
         <Image
-          src={
-            onHiddenInside || onHiddenOutside ? ArrowDownOrange : ArrowUpGray
-          }
+          src={hiddenInside || hiddenOutside ? ArrowDownOrange : ArrowUpGray}
           alt="Sort"
           width={500}
           height={500}
@@ -103,14 +116,13 @@ const SortingButton: React.FC<SortingButtonProps> = ({
 };
 
 const TaskDropDownButton: React.FC<TaskDropDownButtonProps> = ({
-  onSetToggle,
+  setToggle,
   onHidden,
   onFocus,
 }) => {
-  // console.log("Other Hidden:", onHidden)
   return (
     <>
-      <button onClick={onSetToggle}>
+      <button onClick={setToggle}>
         <Image
           src={onFocus || onHidden ? ArrowDown : ArrowUpGray}
           alt="Task dropdown button"
@@ -123,12 +135,12 @@ const TaskDropDownButton: React.FC<TaskDropDownButtonProps> = ({
   );
 };
 
-const AddSubTaskButton: React.FC<{ onSetToggle?: any }> = ({ onSetToggle }) => {
+const AddSubTaskButton: React.FC<{ setToggle?: any }> = ({ setToggle }) => {
   return (
     <>
       <button
-        className="flex items-center gap-x-2 border-solid border-2 border-[#CCCED2] py-[6px] px-[10px] rounded-[50px] ml-auto"
-        onClick={onSetToggle}
+        className="flex items-center gap-x-2 border-solid border-2 border-[#CCCED2] py-[6px] px-[10px] rounded-[50px] ml-auto md:px-[6px]"
+        onClick={setToggle}
       >
         <Image
           src={AddSubTaskIcon}
@@ -137,7 +149,7 @@ const AddSubTaskButton: React.FC<{ onSetToggle?: any }> = ({ onSetToggle }) => {
           width={500}
           height={500}
         />
-        <p>Tambah</p>
+        <p className="md:hidden">Tambah</p>
       </button>
     </>
   );
@@ -149,27 +161,25 @@ const DeleteSubTaskButton: React.FC<{ onSubtaskId: number }> = ({
   const useAppDispatch: () => AppDispatch = useDispatch;
   const dispatch = useAppDispatch();
   const handleDeleteSubtask = () => {
-    const cbPending = () => {
-      console.info("Pending");
-    };
-
     const cbFulfilled = () => {
-      console.info("Fulfilled");
       dispatch(subtasksAction.resetDeleteSubtasks());
     };
 
     const cbFinally = () => {
-      window.location.reload();
-      console.info("Finally");
+      dispatch(
+        subtasksAction.retriveSubtasksThunk({
+          accessToken: cookie.get({ key: "token" }),
+        })
+      );
     };
 
     const id = onSubtaskId.toString();
     dispatch(
       subtasksAction.deleteSubtasksThunk({
         id,
-        cbPending,
         cbFulfilled,
         cbFinally,
+        accessToken: cookie.get({ key: "token" }),
       })
     );
   };
@@ -186,11 +196,11 @@ const DeleteSubTaskButton: React.FC<{ onSubtaskId: number }> = ({
   );
 };
 
-const MoreButton: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
+const MoreButton: React.FC<{ setShow: any }> = ({ setShow }) => {
   return (
     <>
       <button
-        onClick={onSetShow}
+        onClick={setShow}
         className="hover:bg-[#CCCED2] p-1 rounded-[100%]"
       >
         <Image
@@ -198,7 +208,7 @@ const MoreButton: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
           alt="more"
           width={500}
           height={500}
-          className="w-[24px] h-[24px]"
+          className="w-[24px] h-[24px] md:w-[14px] md:h-[14px]"
         />
       </button>
     </>
@@ -206,12 +216,12 @@ const MoreButton: React.FC<{ onSetShow: any }> = ({ onSetShow }) => {
 };
 
 const DoneTaskButton: React.FC<DoneTaskButtonProps> = ({
-  onSetToggle,
+  setToggle,
   onHidden,
 }) => {
   return (
     <>
-      <button onClick={onSetToggle}>
+      <button onClick={setToggle}>
         <Image
           src={!onHidden ? ArrowRight : ArrowUpGray}
           alt="Right arrow"
@@ -237,24 +247,8 @@ const BackButton: React.FC<BackButtonProps> = ({ onRoute, title }) => {
   );
 };
 
-const ResetButton: React.FC<{ title: any; onsetReset: any }> = ({
-  title,
-  onsetReset,
-}) => {
-  return (
-    <>
-      <button
-        className="bg-red-orange rounded-[60px] text-white hover:bg-red-orange-dark py-1 px-4 text-sm"
-        onClick={onsetReset}
-      >
-        {title}
-      </button>
-    </>
-  );
-};
-
 const RegulerButton: React.FC<RegulerButtonProps> = ({
-  onSetAction,
+  setAction,
   title,
   onDisable,
 }) => {
@@ -263,9 +257,9 @@ const RegulerButton: React.FC<RegulerButtonProps> = ({
       <Button
         pill={true}
         className={`bg-red-orange hover:bg-red-orange-dark ${
-          onDisable && "cursor-not-allowed"
+          onDisable && "cursor-not-allowed disabled:hover:bg-red-orange-dark"
         }`}
-        onClick={onSetAction}
+        onClick={setAction}
         disabled={onDisable}
       >
         {title}
@@ -275,7 +269,7 @@ const RegulerButton: React.FC<RegulerButtonProps> = ({
 };
 
 const SaveInputProfileButton: React.FC<SaveInputProfileButtonProps> = ({
-  onSetAction,
+  setAction,
   onDisable,
   onLoading,
 }) => {
@@ -283,18 +277,20 @@ const SaveInputProfileButton: React.FC<SaveInputProfileButtonProps> = ({
     <>
       <button
         type="button"
-        className={`text-white bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:outline-none focus:ring-red-orange-light font-medium rounded-lg text-xs px-5 py-2.5 text-center inline-flex items-center h-[38.6px] ${
+        className={`mx-auto text-white bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:outline-none focus:ring-red-orange-light font-medium rounded-lg text-xs py-2.5 px-5 inline-flex items-center justify-center min-h-[47.6px] w-full ${
           onDisable && "hidden"
         }`}
-        onClick={onSetAction}
+        onClick={setAction}
         disabled={onDisable}
       >
         {onLoading ? (
           <SpinnerLoader onClassName={"fill-red-orange"} />
         ) : (
           <>
-            <Icon icon="ri:save-line" className="w-4 h-4 mr-2 -ml-1" />
-            Save
+            <span className="flex">
+              <Icon icon="ri:save-line" className="w-4 h-4 mr-2 -ml-1" />
+              Save
+            </span>
           </>
         )}
       </button>
@@ -303,14 +299,14 @@ const SaveInputProfileButton: React.FC<SaveInputProfileButtonProps> = ({
 };
 
 const SaveImageProfileButton: React.FC<SaveImageProfileButtonProps> = ({
-  onSetAction,
+  setAction,
   onDisable,
   onLoading,
 }) => {
   return (
     <>
       <button
-        onClick={onSetAction}
+        onClick={setAction}
         className={`text-white bg-red-orange hover:bg-red-orange-dark focus:ring-4 focus:outline-none focus:ring-red-orange-light font-medium rounded-lg w-[100%] py-3 flex justify-center items-center ${
           onDisable && "hidden"
         }`}
@@ -328,6 +324,23 @@ const SaveImageProfileButton: React.FC<SaveImageProfileButtonProps> = ({
   );
 };
 
+const SaveInputTaskButton: React.FC<{
+  setClick: () => void;
+  disabled: boolean;
+}> = ({ setClick, disabled }) => {
+  return (
+    <button
+      className={`rounded-[100%] flex items-center justify-center h-fit w-fit p-[6px] text-red-orange bg-red-orange focus:ring-red-orange-dark ${
+        disabled && "cursor-not-allowed opacity-75"
+      }`}
+      onClick={setClick}
+      disabled={disabled}
+    >
+      <Icon icon="lucide:pen" color="white" width="16" height="16" />
+    </button>
+  );
+};
+
 export {
   AddTaskButton,
   SortingButton,
@@ -341,5 +354,5 @@ export {
   SaveInputProfileButton,
   SaveImageProfileButton,
   AddTaskButton as RenameButton,
-  ResetButton,
+  SaveInputTaskButton,
 };
