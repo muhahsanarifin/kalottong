@@ -1,9 +1,8 @@
 import React from "react";
 import type { NextPageWithLayout } from "../_app";
-import { TitleForgetPassword } from "@/components/Layout";
+import Title from "@/components/Layout";
 import Breadcrumb from "@/components/Breadcrumb";
 import { ResetPasswordForm } from "@/components/Forms";
-import Footer from "@/components/Footer";
 
 const ResetPassword: NextPageWithLayout = () => {
   return (
@@ -19,9 +18,6 @@ const ResetPassword: NextPageWithLayout = () => {
           <ResetPasswordForm />
         </section>
       </main>
-      <section className="w-[50%] mx-auto md:w-full">
-        <Footer />
-      </section>
     </>
   );
 };
@@ -29,5 +25,5 @@ const ResetPassword: NextPageWithLayout = () => {
 export default ResetPassword;
 
 ResetPassword.getLayout = function getLayout(page: React.ReactElement) {
-  return <TitleForgetPassword>{page}</TitleForgetPassword>;
+  return <Title title="Reset Password">{page}</Title>;
 };

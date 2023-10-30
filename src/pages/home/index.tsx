@@ -1,5 +1,5 @@
-import type { NextPageWithLayout } from "../_app"
-import { TitleHome } from "@/components/Layout";
+import type { NextPageWithLayout } from "../_app";
+import Title from "@/components/Layout";
 import Header from "@/components/Header";
 import Main from "@/components/Main";
 import Footer from "@/components/Footer";
@@ -9,7 +9,6 @@ const Home: NextPageWithLayout = () => {
     <>
       <Header />
       <Main />
-      <Footer />
     </>
   );
 };
@@ -17,5 +16,5 @@ const Home: NextPageWithLayout = () => {
 export default Home;
 
 Home.getLayout = function getLayout(page: React.ReactElement) {
-  return (<TitleHome>{page}</TitleHome>);
+  return <Title title="Home">{page}</Title>;
 };

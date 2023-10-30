@@ -1,9 +1,9 @@
 import React from "react";
 import type { NextPageWithLayout } from "../_app";
-import { TitleRegister } from "@/components/Layout";
+import Title from "@/components/Layout";
+import { RouteToHome } from "@/helpers/handleRoutes";
 import Breadcrumb from "@/components/Breadcrumb";
 import { RegisterForm } from "@/components/Forms";
-import Footer from "@/components/Footer";
 
 const Register: NextPageWithLayout = () => {
   return (
@@ -17,9 +17,6 @@ const Register: NextPageWithLayout = () => {
         </h3>
         <RegisterForm />
       </section>
-      <section className="w-[50%] mx-auto md:w-full">
-        <Footer />
-      </section>
     </>
   );
 };
@@ -27,5 +24,9 @@ const Register: NextPageWithLayout = () => {
 export default Register;
 
 Register.getLayout = function getLayout(page: React.ReactElement) {
-  return <TitleRegister>{page}</TitleRegister>;
+  return (
+    <RouteToHome>
+      <Title title="Register">{page}</Title>
+    </RouteToHome>
+  );
 };
