@@ -16,7 +16,7 @@ import {
   ArrowUpGray,
   ArrowRight,
   MoreIcon,
-} from "../utils/assest";
+} from "../utils/assets";
 
 import {
   SortingButtonProps,

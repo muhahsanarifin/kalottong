@@ -16,7 +16,7 @@ import {
   KalottongLogo,
   ActiveNotificationIcon,
   OffNotificationIcon,
-} from "../utils/assest";
+} from "../utils/assets";
 
 const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
   const useAppDispatch: () => AppDispatch = useDispatch;
@@ -203,10 +203,7 @@ const Header: React.FC<{ onActive?: any }> = ({ onActive }) => {
               </div>
             </>
           ) : (
-            <button
-              className="flex"
-              onClick={() => setShowAuthModal(true)}
-            >
+            <button className="flex" onClick={() => setShowAuthModal(true)}>
               <Icon
                 icon="pepicons-pop:enter-circle"
                 color="#f3551c"

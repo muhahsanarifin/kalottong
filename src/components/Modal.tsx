@@ -17,7 +17,7 @@ import { customeCheckboxTheme } from "../utils/custome/input";
 
 import { Modal, Label, Checkbox } from "flowbite-react";
 import { SpinnerLoader, ErrorMessage } from "./Feed";
-import { EditIcon, DeleteIcon } from "../utils/assest";
+import { EditIcon, DeleteIcon } from "../utils/assets";
 
 interface LogoutModalProps {
   setShow: () => void;

@@ -1,14 +1,10 @@
 import Image from "next/image";
-import { FourZeroFour } from "@/utils/assest";
+import { FourZeroFour } from "@/utils/assets";
 
 const NotFound = () => {
   return (
     <main className="absolute inset-0 flex">
-      <Image
-        src={FourZeroFour}
-        alt="Not Found"
-        className="m-auto"
-      />
+      <Image src={FourZeroFour} alt="Not Found" className="m-auto" />
     </main>
   );
 };

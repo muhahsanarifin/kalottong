@@ -14,7 +14,7 @@ import { customDatePickerTheme } from "../utils/custome/input";
 import { formatViewInputTaskDate } from "../utils/date";
 import { SaveInputTaskButton } from "./Button";
 
-import { Menu, Calender, AddTaskIcon } from "../utils/assest";
+import { Menu, Calender, AddTaskIcon } from "../utils/assets";
 
 const InputTask: React.FC<{
   onBody?: any;

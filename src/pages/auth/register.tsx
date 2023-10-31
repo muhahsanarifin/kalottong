@@ -11,10 +11,12 @@ const Register: NextPageWithLayout = () => {
       <section className="flex w-[50%] mx-auto md:w-full">
         <Breadcrumb page="Register" />
       </section>
-      <section className="h-[90vh] flex flex-col items-center justify-center">
-        <h3 className="text-2xl font-bold text-gray-900">
-          <span className="text-red-orange">kalottong</span> member
-        </h3>
+      <section className="min-h-[90vh] flex flex-col items-center">
+        <div className="my-12">
+          <h3 className="text-2xl sm:text-[18px] font-[600] text-gray-900">
+            <span className="text-red-orange">Kalottong</span> | Register as member.
+          </h3>
+        </div>
         <RegisterForm />
       </section>
     </>

@@ -111,7 +111,7 @@ export const customeCheckboxTheme: CustomFlowbiteTheme["checkbox"] = {
 };
 
 export const customeInputTextTheme: CustomFlowbiteTheme["textInput"] = {
-  base: "",
+  base: "relative w-full",
   field: {
     base: "",
     input: {
